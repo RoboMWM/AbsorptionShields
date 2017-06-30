@@ -2,6 +2,7 @@ package to.us.tf.AbsorptionShields.shield;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -35,6 +36,9 @@ public class ShieldTrackerTask implements Runnable
         ItemStack helmet = player.getInventory().getHelmet();
         if (helmet == null)
             return null;
+        if (!helmet.hasItemMeta())
+            return null;
+        ItemMeta helmetMeta = helmet.getItemMeta();
 
     }
 }
