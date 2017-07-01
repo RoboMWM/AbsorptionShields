@@ -3,7 +3,10 @@ package to.us.tf.AbsorptionShields.shield;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import to.us.tf.AbsorptionShields.ConfigManager;
 
 /**
  * Created on 6/30/2017.
@@ -12,33 +15,48 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author RoboMWM
  */
-public class ShieldTrackerTask implements Runnable
+public class ShieldTrackerTask extends BukkitRunnable
 {
-    JavaPlugin plugin;
+    JavaPlugin instance;
+    ShieldManager shieldManager;
+    ConfigManager configManager;
+
+    ShieldTrackerTask(JavaPlugin plugin, ConfigManager configManager)
+    {
+        this.instance = plugin;
+    }
 
     @Override
     public void run()
     {
-        for (Player player : plugin.getServer().getOnlinePlayers())
+        for (Player player : instance.getServer().getOnlinePlayers())
         {
             Shield shield = (Shield)player.getMetadata("AS_SHIELD").get(0).value();
+            String wearingShieldName = shieldManager.getWornShield(player);
 
-            if (shield == null && helmet == null)
+            if (shield == null && wearingShieldName == null)
                 continue;
 
-            if (helmet.hasItemMeta())
+            //Add a shield
+            if (shield == null && wearingShieldName != null)
+            {
+                player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName)));
+                continue;
+            }
 
+            if (shield != null)
+            {
+                //Delete a shield
+                if (wearingShieldName == null || wearingShieldName.equalsIgnoreCase(shield.getName()))
+                {
+                    player.removeMetadata("AS_SHIELD", instance);
+                    shieldManager.shatterShield(player);
+                    continue;
+                }
+            }
         }
     }
 
-    private String helmetShieldName(Player player)
-    {
-        ItemStack helmet = player.getInventory().getHelmet();
-        if (helmet == null)
-            return null;
-        if (!helmet.hasItemMeta())
-            return null;
-        ItemMeta helmetMeta = helmet.getItemMeta();
 
-    }
+
 }

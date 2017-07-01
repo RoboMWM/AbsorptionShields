@@ -9,8 +9,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import to.us.tf.AbsorptionShields.ConfigManager;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -29,67 +32,22 @@ import java.util.Set;
 public class ShieldManager implements Listener
 {
     ShieldUtils shieldUtils;
+    ConfigManager configManager;
 
-    Set<Player> playersWithDamagedShields = new HashSet<>(); //Cache of players who need shields to be regenerated
+    private Set<Player> playersWithDamagedShields = new HashSet<>(); //Cache of players who need shields to be regenerated
 
+    public Set<Player> getPlayersWithDamagedShields()
+    {
+        return playersWithDamagedShields;
+    }
 
     public ShieldManager(JavaPlugin plugin, ShieldUtils shieldUtils)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
-        //Shield regeneration task
-        //Initially I was going to stick this in the Shield object but a) would have to cancel task when object is "deleted" and b) would have to pass a plugin instance to each.
-        final long rateToCheck = 5L;
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                for (Player player : playersWithDamagedShields)
-                {
-                    if (!hasShield(player))
-                    {
-                        playersWithDamagedShields.remove(player);
-                        continue;
-                    }
-
-                    Shield shield = getShield(player);
-
-                    //Not ready to regenerate yet
-                    if (!shield.incrementCounter(5L))
-                        continue;
-
-                    float shieldHealth = shieldUtils.getShieldHealth(player);
-
-                    //All regenerated
-                    if (shieldHealth >= shield.getMaxShieldStrength())
-                    {
-                        shieldUtils.setShieldHealth(player, shield.getMaxShieldStrength());
-                        playersWithDamagedShields.remove(player);
-                        //TODO: shield regeneration complete sound
-                        continue;
-                    }
-
-                    //Regen
-                    if (shieldHealth < shield.getMaxShieldStrength())
-                    {
-                        float amountToRegen = shield.getRegenRate() / (20L / rateToCheck);
-                        float missingShield = shield.getMaxShieldStrength() - shieldHealth;
-                        //TODO: regeneration sound effect with pitch on missingShield.
-
-                        //Top off if near full
-                        if (amountToRegen > missingShield)
-                        {
-                            shieldUtils.setShieldHealth(player, shield.getMaxShieldStrength());
-                        }
-                        else
-                            shieldUtils.setShieldHealth(player, shieldHealth + amountToRegen);
-                    }
-                }
-            }
-        }.runTaskTimer(plugin, 300L, rateToCheck);
-
-        //TODO: start shield tracker
+        //Schedule tasks
+        new ShieldRegeneratationTask(this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
+        new ShieldTrackerTask(plugin, configManager).runTaskTimer(plugin, 300L, 20L);
     }
 
 
@@ -110,7 +68,7 @@ public class ShieldManager implements Listener
         if (!hasShield(player))
             return;
 
-        resetRegenTime(player);
+        getShield(player).resetRegenCounter();
 
         float shieldHealth = shieldUtils.getShieldHealth(player);
         if (shieldHealth <= 0f)
@@ -125,8 +83,7 @@ public class ShieldManager implements Listener
         if (shieldHealth < 0)
         {
             event.setDamage(-shieldHealth);
-            shieldUtils.setShieldHealth(player, 0f);
-            //TODO: shield broken sound effect
+            shatterShield(player);
             return;
         }
 
@@ -135,21 +92,60 @@ public class ShieldManager implements Listener
         //TODO: shield damage sound effect
     }
 
-    private boolean hasShield(Player player)
+    public boolean hasShield(Player player)
     {
         return player.hasMetadata("AS_SHIELD");
     }
 
-    private void resetRegenTime(Player player)
-    {
-
-    }
-
-    private Shield getShield(Player player)
+    /**
+     * Get the shield currently active on the player
+     * @param player
+     * @return
+     */
+    public Shield getShield(Player player)
     {
         if (!hasShield(player))
             return null;
         return (Shield)player.getMetadata("AS_SHIELD").get(0).value();
+    }
+
+    /**
+     * Sets absorption to 0 if not already set to 0
+     * @param player
+     */
+    public void shatterShield(Player player)
+    {
+        if (shieldUtils.getShieldHealth(player) <= 0)
+            return;
+        shieldUtils.setShieldHealth(player, 0);
+        //TODO: sound effect
+    }
+
+    /**
+     * Get the name of the shield worn on the player (i.e. name of helmet item)
+     * TODO: find a better name...
+     * @param player
+     * @return name of the shield; null otherwise (not wearing a shield)
+     */
+    public String getWornShield(Player player)
+    {
+        ItemStack helmet = player.getInventory().getHelmet();
+        if (helmet == null)
+            return null;
+        if (!helmet.hasItemMeta())
+            return null;
+
+        ItemMeta helmetMeta = helmet.getItemMeta();
+
+        if (!helmetMeta.hasDisplayName())
+            return null;
+
+        String name = helmetMeta.getDisplayName();
+
+        if (!configManager.isValidShieldName(name))
+            return null;
+
+        return name;
     }
 }
 

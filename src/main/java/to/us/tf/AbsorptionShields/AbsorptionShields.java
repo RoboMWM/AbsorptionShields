@@ -10,4 +10,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class AbsorptionShields extends JavaPlugin
 {
 
+    ConfigManager configManager;
+
+    public ConfigManager getConfigManager()
+    {
+        return configManager;
+    }
 }
