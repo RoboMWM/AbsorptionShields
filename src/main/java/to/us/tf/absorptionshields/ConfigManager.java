@@ -56,13 +56,14 @@ public class ConfigManager
 
             try
             {
-                strength = (float)section.get("strength");
-                time = (long)section.get("time");
-                rate = (float)section.get("rate");
+                strength = (float)section.getDouble("strength");
+                time = (long)section.getDouble("time");
+                rate = (float)section.getDouble("rate");
             }
             catch (Exception e)
             {
                 plugin.getLogger().warning("The \"" + sectionName + "\" shield is not configured correctly.");
+                plugin.getLogger().warning(e.getMessage());
                 continue;
             }
 
