@@ -29,8 +29,6 @@ public class ShieldRegeneratationTask extends BukkitRunnable
     @Override
     public void run()
     {
-        if (shieldManager.getPlayersWithDamagedShields().isEmpty())
-            return;
         for (Player player : shieldManager.getPlayersWithDamagedShields())
         {
             //No longer has an active shield

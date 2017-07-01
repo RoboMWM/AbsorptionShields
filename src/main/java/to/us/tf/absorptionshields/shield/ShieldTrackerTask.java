@@ -31,7 +31,7 @@ public class ShieldTrackerTask extends BukkitRunnable
     {
         for (Player player : instance.getServer().getOnlinePlayers())
         {
-            Shield shield = (Shield)player.getMetadata("AS_SHIELD").get(0).value();
+            Shield shield = shieldManager.getShield(player);
             String wearingShieldName = shieldManager.getWornShield(player);
 
             if (shield == null && wearingShieldName == null)
