@@ -1,4 +1,4 @@
-package to.us.tf.AbsorptionShields.shield;
+package to.us.tf.absorptionshields.shield;
 
 public class Shield
 {

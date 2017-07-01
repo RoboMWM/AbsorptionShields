@@ -1,10 +1,10 @@
-package to.us.tf.AbsorptionShields;
+package to.us.tf.absorptionshields;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import to.us.tf.AbsorptionShields.shield.ShieldManager;
-import to.us.tf.AbsorptionShields.shield.ShieldUtils;
+import to.us.tf.absorptionshields.shield.ShieldManager;
+import to.us.tf.absorptionshields.shield.ShieldUtils;
 
 /**
  * Created on 3/18/2017.

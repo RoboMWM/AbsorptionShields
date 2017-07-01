@@ -1,4 +1,4 @@
-package to.us.tf.AbsorptionShields;
+package to.us.tf.absorptionshields;
 
 import org.bukkit.Material;
 import org.bukkit.command.Command;

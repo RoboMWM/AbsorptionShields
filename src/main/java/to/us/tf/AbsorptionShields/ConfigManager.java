@@ -1,10 +1,10 @@
-package to.us.tf.AbsorptionShields;
+package to.us.tf.absorptionshields;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import to.us.tf.AbsorptionShields.shield.Shield;
+import to.us.tf.absorptionshields.shield.Shield;
 
 import java.util.HashMap;
 import java.util.Map;

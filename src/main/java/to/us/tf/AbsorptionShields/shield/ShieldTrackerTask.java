@@ -1,12 +1,10 @@
-package to.us.tf.AbsorptionShields.shield;
+package to.us.tf.absorptionshields.shield;
 
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import to.us.tf.AbsorptionShields.ConfigManager;
+import to.us.tf.absorptionshields.ConfigManager;
 
 /**
  * Created on 6/30/2017.

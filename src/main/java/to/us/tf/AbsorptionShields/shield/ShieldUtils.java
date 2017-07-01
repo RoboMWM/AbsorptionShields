@@ -1,4 +1,4 @@
-package to.us.tf.AbsorptionShields.shield;
+package to.us.tf.absorptionshields.shield;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
