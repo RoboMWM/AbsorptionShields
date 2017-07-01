@@ -32,7 +32,7 @@ public class AbsorptionShields extends JavaPlugin
 
         configManager = new ConfigManager(this);
         new ShieldManager(this, shieldUtils, configManager);
-        getCommand("makeshield").setExecutor(new ConvertShieldCommand(this, configManager));
+        getCommand("createshield").setExecutor(new ConvertShieldCommand(this, configManager));
     }
 
     public ItemStack convertToShield(String shieldName, ItemStack itemStack)

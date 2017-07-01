@@ -1,0 +1,19 @@
+name: AbsorptionShields
+version: ${project.version}
+#website:
+author: RoboMWM
+main: to.us.tf.absorptionshields.AbsorptionShields
+commands:
+  createshield:
+      description: Converts the item you are holding into a shield
+      permission: absorptionshields.createshield
+      permission-message: Hmm, this command isn't for you.
+permissions:
+    absorptionshields.*:
+        description: Grants ALL THE THINGS
+        children:
+            absorptionshields.createshield: true
+    absorptionshields.createshield:
+        description: Permission to /createshield
+        default: op
+        
