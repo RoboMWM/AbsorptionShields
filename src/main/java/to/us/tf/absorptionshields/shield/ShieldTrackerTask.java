@@ -48,7 +48,7 @@ public class ShieldTrackerTask extends BukkitRunnable
             if (shield != null)
             {
                 //Delete a shield
-                if (wearingShieldName == null || wearingShieldName.equalsIgnoreCase(shield.getName()))
+                if (wearingShieldName == null || !wearingShieldName.equalsIgnoreCase(shield.getName()))
                 {
                     player.removeMetadata("AS_SHIELD", instance);
                     shieldManager.shatterShield(player);
