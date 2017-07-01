@@ -1,6 +1,7 @@
 package to.us.tf.AbsorptionShields.shield;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,13 +42,15 @@ public class ShieldManager implements Listener
         return playersWithDamagedShields;
     }
 
-    public ShieldManager(JavaPlugin plugin, ShieldUtils shieldUtils)
+    public ShieldManager(JavaPlugin plugin, ShieldUtils shieldUtils, ConfigManager configManager)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        this.shieldUtils = shieldUtils;
+        this.configManager = configManager;
 
         //Schedule tasks
         new ShieldRegeneratationTask(this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
-        new ShieldTrackerTask(plugin, configManager).runTaskTimer(plugin, 300L, 20L);
+        new ShieldTrackerTask(plugin, this, configManager).runTaskTimer(plugin, 300L, 20L);
     }
 
 
@@ -142,7 +145,7 @@ public class ShieldManager implements Listener
 
         String name = helmetMeta.getDisplayName();
 
-        if (!configManager.isValidShieldName(name))
+        if (!configManager.isValidShieldName(name, true))
             return null;
 
         return name;

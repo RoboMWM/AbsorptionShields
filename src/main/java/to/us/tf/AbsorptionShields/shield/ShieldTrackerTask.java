@@ -21,9 +21,11 @@ public class ShieldTrackerTask extends BukkitRunnable
     ShieldManager shieldManager;
     ConfigManager configManager;
 
-    ShieldTrackerTask(JavaPlugin plugin, ConfigManager configManager)
+    ShieldTrackerTask(JavaPlugin plugin, ShieldManager shieldManager, ConfigManager configManager)
     {
         this.instance = plugin;
+        this.shieldManager = shieldManager;
+        this.configManager = configManager;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class ShieldTrackerTask extends BukkitRunnable
             //Add a shield
             if (shield == null && wearingShieldName != null)
             {
-                player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName)));
+                player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName, true)));
                 continue;
             }
 

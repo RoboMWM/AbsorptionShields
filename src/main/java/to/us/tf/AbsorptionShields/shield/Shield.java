@@ -23,6 +23,18 @@ public class Shield
         this.regenCounter = time;
     }
 
+    /**
+     * Copy constructor
+     * @param template
+     */
+    public Shield(Shield template)
+    {
+        this.name = template.name;
+        this.maxShieldStrength = template.maxShieldStrength;
+        this.regenTime = template.regenTime;
+        this.regenRate = template.regenRate;
+    }
+
     public void resetRegenCounter()
     {
         regenCounter = 0L;

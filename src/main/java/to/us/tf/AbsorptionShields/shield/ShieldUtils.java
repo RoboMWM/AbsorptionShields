@@ -28,19 +28,11 @@ public class ShieldUtils
     private Method setAbsorptionHearts;
     private Method muhHandle;
 
-    public ShieldUtils(JavaPlugin plugin)
+    public ShieldUtils(JavaPlugin plugin) throws Exception
     {
-        try
-        {
-            getAbsorptionHearts = ReflectionHandler.getMethod("EntityHuman", ReflectionHandler.PackageType.MINECRAFT_SERVER, "getAbsorptionHearts");
-            setAbsorptionHearts = ReflectionHandler.getMethod("EntityHuman", ReflectionHandler.PackageType.MINECRAFT_SERVER, "setAbsorptionHearts", Float.class);
-            muhHandle = ReflectionHandler.getMethod("CraftPlayer", ReflectionHandler.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
-        }
-        catch (Exception e)
-        {
-            plugin.getLogger().severe("So uh yea I think Minecraft must've changed how they set absorption hearts or something.");
-            e.printStackTrace();
-        }
+        getAbsorptionHearts = ReflectionHandler.getMethod("EntityHuman", ReflectionHandler.PackageType.MINECRAFT_SERVER, "getAbsorptionHearts");
+        setAbsorptionHearts = ReflectionHandler.getMethod("EntityHuman", ReflectionHandler.PackageType.MINECRAFT_SERVER, "setAbsorptionHearts", Float.class);
+        muhHandle = ReflectionHandler.getMethod("CraftPlayer", ReflectionHandler.PackageType.CRAFTBUKKIT_ENTITY, "getHandle");
     }
 
     public float getShieldHealth(Player player)
