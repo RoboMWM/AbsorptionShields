@@ -14,8 +14,9 @@ public class Shield
      * @param time Time before regenerating in ticks
      * @param rate How many healthpoints to regenerate per second
      */
-    public Shield(float strength, long time, float rate)
+    public Shield(String name, float strength, long time, float rate)
     {
+        this.name = name;
         this.maxShieldStrength = strength;
         this.regenTime = time;
         this.regenRate = rate;

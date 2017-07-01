@@ -42,7 +42,8 @@ public class AbsorptionShields extends JavaPlugin
 
         ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
         itemMeta.setDisplayName(configManager.createShield(shieldName, false).getName());
+
         itemStack.setItemMeta(itemMeta);
-        return itemStack.clone();
+        return itemStack;
     }
 }
