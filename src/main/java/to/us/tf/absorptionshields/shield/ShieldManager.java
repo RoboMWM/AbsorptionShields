@@ -67,6 +67,9 @@ public class ShieldManager implements Listener
         if (shieldHealth <= 0f)
             return;
 
+        //cache player for shield regeneration
+        playersWithDamagedShields.add(player);
+
         //DamageModifier API is deprecated and will likely be removed soon; this'll have to do.
         //TODO: does getDamage factor in damage before armor/absorption/etc.???????? (I'm assuming it does...)
 
