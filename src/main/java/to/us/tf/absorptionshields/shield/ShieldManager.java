@@ -33,7 +33,17 @@ public class ShieldManager implements Listener
 
     public Set<Player> getPlayersWithDamagedShields()
     {
-        return playersWithDamagedShields;
+        return new HashSet<>(playersWithDamagedShields);
+    }
+
+    public void addPlayerWithDamagedShield(Player player)
+    {
+        playersWithDamagedShields.add(player);
+    }
+
+    public void removePlayerWithDamagedShield(Player player)
+    {
+        playersWithDamagedShields.remove(player);
     }
 
     public ShieldManager(JavaPlugin plugin, ShieldUtils shieldUtils, ConfigManager configManager)

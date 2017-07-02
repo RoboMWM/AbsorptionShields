@@ -41,7 +41,7 @@ public class ShieldTrackerTask extends BukkitRunnable
             if (shield == null && wearingShieldName != null)
             {
                 player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName, true)));
-                shieldManager.getPlayersWithDamagedShields().add(player);
+                shieldManager.addPlayerWithDamagedShield(player);
                 continue;
             }
 

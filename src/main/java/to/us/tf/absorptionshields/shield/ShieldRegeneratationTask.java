@@ -34,7 +34,7 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             //No longer has an active shield
             if (!shieldManager.hasShield(player))
             {
-                shieldManager.getPlayersWithDamagedShields().remove(player);
+                shieldManager.addPlayerWithDamagedShield(player);
                 continue;
             }
 
@@ -50,7 +50,7 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             if (shieldHealth >= shield.getMaxShieldStrength())
             {
                 shieldUtils.setShieldHealth(player, shield.getMaxShieldStrength());
-                shieldManager.getPlayersWithDamagedShields().remove(player);
+                shieldManager.removePlayerWithDamagedShield(player);
                 //TODO: shield regeneration complete sound
                 continue;
             }
