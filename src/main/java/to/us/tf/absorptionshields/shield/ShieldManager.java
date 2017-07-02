@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 import to.us.tf.absorptionshields.ConfigManager;
 
 import java.util.HashSet;
@@ -101,6 +102,7 @@ public class ShieldManager implements Listener
         shieldUtils.setShieldHealth(player, shieldHealth);
         //TODO: shield damage sound effect
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 1.0f, 2.0f);
+        player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
     }
 
     //Shields prevent armor from taking damage (since they ignore armor resistances)
