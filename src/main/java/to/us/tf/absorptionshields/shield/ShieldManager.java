@@ -1,11 +1,13 @@
 package to.us.tf.absorptionshields.shield;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -88,6 +90,17 @@ public class ShieldManager implements Listener
         //TODO: shield damage sound effect
     }
 
+    //Shields prevent armor from taking damage (since they ignore armor resistances)
+    @EventHandler(ignoreCancelled = true)
+    private void onArmorDamage(PlayerItemDamageEvent event)
+    {
+        if (shieldUtils.getShieldHealth(event.getPlayer()) <= 0)
+            return;
+
+        if (isArmor(event.getItem().getType()))
+            event.setCancelled(true);
+    }
+
     public boolean hasShield(Player player)
     {
         return player.hasMetadata("AS_SHIELD");
@@ -142,6 +155,40 @@ public class ShieldManager implements Listener
             return null;
 
         return name;
+    }
+
+    /**
+     * Ew
+     * @param material
+     * @return if the item is a piece of armor
+     */
+    public boolean isArmor(Material material)
+    {
+        switch (material)
+        {
+            case CHAINMAIL_HELMET:
+            case LEATHER_HELMET:
+            case GOLD_HELMET:
+            case IRON_HELMET:
+            case DIAMOND_HELMET:
+            case GOLD_CHESTPLATE:
+            case IRON_CHESTPLATE:
+            case DIAMOND_CHESTPLATE:
+            case LEATHER_CHESTPLATE:
+            case CHAINMAIL_CHESTPLATE:
+            case GOLD_LEGGINGS:
+            case IRON_LEGGINGS:
+            case DIAMOND_LEGGINGS:
+            case LEATHER_LEGGINGS:
+            case CHAINMAIL_LEGGINGS:
+            case DIAMOND_BOOTS:
+            case GOLD_BOOTS:
+            case CHAINMAIL_BOOTS:
+            case IRON_BOOTS:
+            case LEATHER_BOOTS:
+                return true;
+        }
+        return false;
     }
 }
 
