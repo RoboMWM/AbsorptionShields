@@ -1,6 +1,8 @@
 package to.us.tf.absorptionshields.shield;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -88,6 +90,7 @@ public class ShieldManager implements Listener
         event.setDamage(0);
         shieldUtils.setShieldHealth(player, shieldHealth);
         //TODO: shield damage sound effect
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 1.0f, 2.0f);
     }
 
     //Shields prevent armor from taking damage (since they ignore armor resistances)
@@ -128,6 +131,7 @@ public class ShieldManager implements Listener
             return;
         shieldUtils.setShieldHealth(player, 0);
         //TODO: sound effect
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 1.0f, 0.5f);
     }
 
     /**
