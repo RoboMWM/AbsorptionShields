@@ -153,7 +153,7 @@ public class ShieldManager implements Listener
         shieldUtils.setShieldHealth(player, 0);
 
         //TODO: allow customization
-        player.getWorld().playSound(player.getLocation(), "fortress.shieldbroken", SoundCategory.PLAYERS, 1.0f, 0.5f);
+        player.getWorld().playSound(player.getLocation(), "fortress.shieldbroken", SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 
     /**
