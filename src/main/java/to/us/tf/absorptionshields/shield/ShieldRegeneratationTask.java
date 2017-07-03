@@ -62,8 +62,8 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             {
                 float amountToRegen = shield.getRegenRate() / (20L / rateToCheck);
                 float missingShield = shield.getMaxShieldStrength() - shieldHealth;
-                //TODO: regeneration sound effect with pitch on missingShield or remove this
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_CHIME, 0.5f, 0.5f + (shieldHealth / (shield.getMaxShieldStrength() / 1.5f)));
+                //TODO: regeneration sound effect with pitch? (Should be an option perhaps, can be annoying depending on gameplay type)
+                //player.playSound(player.getLocation(), Sound.BLOCK_NOTE_CHIME, 0.5f, 0.5f + (shieldHealth / (shield.getMaxShieldStrength() / 1.5f)));
 
                 //TODO: make configurable
                 if (shieldHealth <= 0)
