@@ -100,8 +100,17 @@ public class ShieldManager implements Listener
 
         event.setDamage(0);
         shieldUtils.setShieldHealth(player, shieldHealth);
-        //TODO: shield damage sound effect
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 1.0f, 2.0f);
+        //TODO: make configurable; distance check required?
+        //TODO: pitch variation
+        for (Player p : player.getWorld().getPlayers())
+        {
+            if (p == player)
+                continue;
+            player.getWorld().playSound(player.getLocation(), "fortress.shieldhit", SoundCategory.PLAYERS, 1.0f, 1.0f);
+        }
+        player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, 1.0f);
+
+        //TODO: use player#setglowing (to avoid particles)
         player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
     }
 
