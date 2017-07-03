@@ -94,6 +94,7 @@ public class ShieldManager implements Listener
         {
             event.setDamage(-shieldHealth);
             shatterShield(player);
+            player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
             return;
         }
 
