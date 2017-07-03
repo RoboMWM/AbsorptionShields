@@ -18,6 +18,7 @@ import to.us.tf.absorptionshields.ConfigManager;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 3/18/2017.
@@ -85,7 +86,7 @@ public class ShieldManager implements Listener
         playersWithDamagedShields.add(player);
 
         //DamageModifier API is deprecated and will likely be removed soon; this'll have to do.
-        //TODO: does getDamage factor in damage before armor/absorption/etc.???????? (I'm assuming it does...)
+        //TODO: does getDamage factor in damage before armor/absorption/etc.???????? (seems it does, which is what we want)
 
         shieldHealth -= event.getDamage();
 
@@ -101,14 +102,13 @@ public class ShieldManager implements Listener
         event.setDamage(0);
         shieldUtils.setShieldHealth(player, shieldHealth);
         //TODO: make configurable; distance check required?
-        //TODO: pitch variation
         for (Player p : player.getWorld().getPlayers())
         {
             if (p == player)
                 continue;
-            player.getWorld().playSound(player.getLocation(), "fortress.shieldhit", SoundCategory.PLAYERS, 1.0f, 1.0f);
+            player.getWorld().playSound(player.getLocation(), "fortress.shieldhit", SoundCategory.PLAYERS, 1.0f, r4nd0m(0.8f, 1.2f));
         }
-        player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, 1.0f);
+        player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
 
         //TODO: use player#setglowing (to avoid particles)
         player.addPotionEffect(PotionEffectType.GLOWING.createEffect(8, 0));
@@ -215,6 +215,10 @@ public class ShieldManager implements Listener
                 return true;
         }
         return false;
+    }
+
+    public float r4nd0m(float min, float max) {
+        return (float)ThreadLocalRandom.current().nextDouble(min, max + 1.0D);
     }
 }
 
