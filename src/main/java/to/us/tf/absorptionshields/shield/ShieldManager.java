@@ -90,7 +90,7 @@ public class ShieldManager implements Listener
         shieldHealth -= event.getDamage();
 
         //Shield broken
-        if (shieldHealth < 0)
+        if (shieldHealth <= 0)
         {
             event.setDamage(-shieldHealth);
             shatterShield(player);
