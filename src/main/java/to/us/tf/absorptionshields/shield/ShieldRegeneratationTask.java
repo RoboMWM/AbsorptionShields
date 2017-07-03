@@ -1,6 +1,7 @@
 package to.us.tf.absorptionshields.shield;
 
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -61,12 +62,12 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             {
                 float amountToRegen = shield.getRegenRate() / (20L / rateToCheck);
                 float missingShield = shield.getMaxShieldStrength() - shieldHealth;
-                //TODO: regeneration sound effect with pitch on missingShield.
+                //TODO: regeneration sound effect with pitch on missingShield or remove this
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_CHIME, 0.5f, 0.5f + (shieldHealth / (shield.getMaxShieldStrength() / 1.5f)));
 
-                //TODO: sound effect when starting regeneration of fully depleted shield
+                //TODO: make configurable
                 if (shieldHealth <= 0)
-                    player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, 0.1f, 2f);
+                    player.playSound(player.getLocation(), "fortress.shieldbootingup", SoundCategory.PLAYERS, 3000000f, 1f);
 
                 //Top off if near full
                 if (amountToRegen > missingShield)

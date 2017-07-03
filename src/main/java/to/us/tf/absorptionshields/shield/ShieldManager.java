@@ -1,7 +1,6 @@
 package to.us.tf.absorptionshields.shield;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -111,7 +110,7 @@ public class ShieldManager implements Listener
         player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, 1.0f);
 
         //TODO: use player#setglowing (to avoid particles)
-        player.addPotionEffect(PotionEffectType.GLOWING.createEffect(10, 0));
+        player.addPotionEffect(PotionEffectType.GLOWING.createEffect(8, 0));
     }
 
     //Shields prevent armor from taking damage (since they ignore armor resistances)
@@ -151,8 +150,9 @@ public class ShieldManager implements Listener
         if (shieldUtils.getShieldHealth(player) <= 0)
             return;
         shieldUtils.setShieldHealth(player, 0);
-        //TODO: sound effect
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 1.0f, 0.5f);
+
+        //TODO: allow customization
+        player.getWorld().playSound(player.getLocation(), "fortress.shieldbroken", SoundCategory.PLAYERS, 1.0f, 0.5f);
     }
 
     /**
