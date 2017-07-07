@@ -100,14 +100,14 @@ public class ShieldManager implements Listener
         //Shield broken
         if (shieldHealth <= 0)
         {
-            event.setDamage(-shieldHealth);
+            shieldHealth = -shieldHealth; //Unless -shieldHealth does this already. Idk. I don't use the - operator all that much.
+            event.setDamage(shieldHealth);
             shatterShield(player);
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
-            instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, -shieldHealth, event));
+            instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, shieldHealth, event));
             return;
         }
 
-        event.setDamage(0);
         shieldUtils.setShieldHealth(player, shieldHealth);
 
         //TODO: make configurable
@@ -119,6 +119,7 @@ public class ShieldManager implements Listener
         instance.timedGlow(player, 8L);
 
         instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
+        event.setDamage(0);
     }
 
     //Shields prevent armor from taking damage (since they ignore armor resistances)
