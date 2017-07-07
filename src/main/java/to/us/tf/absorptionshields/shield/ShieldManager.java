@@ -12,9 +12,12 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
+import to.us.tf.absorptionshields.AbsorptionShields;
 import to.us.tf.absorptionshields.ConfigManager;
+import to.us.tf.absorptionshields.event.ShieldDamageEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class ShieldManager implements Listener
 {
+    AbsorptionShields instance;
     ShieldUtils shieldUtils;
     ConfigManager configManager;
 
@@ -47,11 +51,12 @@ public class ShieldManager implements Listener
         playersWithDamagedShields.remove(player);
     }
 
-    public ShieldManager(JavaPlugin plugin, ShieldUtils shieldUtils, ConfigManager configManager)
+    public ShieldManager(AbsorptionShields plugin, ShieldUtils shieldUtils, ConfigManager configManager)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.shieldUtils = shieldUtils;
         this.configManager = configManager;
+        this.instance = plugin;
 
         //Schedule tasks
         new ShieldRegeneratationTask(this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
@@ -76,7 +81,8 @@ public class ShieldManager implements Listener
         if (!hasShield(player))
             return;
 
-        getShield(player).resetRegenCounter();
+        Shield shield = getShield(player);
+        shield.resetRegenCounter();
 
         float shieldHealth = shieldUtils.getShieldHealth(player);
         if (shieldHealth <= 0f)
@@ -90,28 +96,29 @@ public class ShieldManager implements Listener
 
         shieldHealth -= event.getDamage();
 
+        //TODO: make configurable
         //Shield broken
         if (shieldHealth <= 0)
         {
             event.setDamage(-shieldHealth);
             shatterShield(player);
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
+            instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, -shieldHealth, event));
             return;
         }
 
         event.setDamage(0);
         shieldUtils.setShieldHealth(player, shieldHealth);
-        //TODO: make configurable; distance check required?
-        for (Player p : player.getWorld().getPlayers())
-        {
-            if (p == player)
-                continue;
-            player.getWorld().playSound(player.getLocation(), "fortress.shieldhit", SoundCategory.PLAYERS, 1.0f, r4nd0m(0.8f, 1.2f));
-        }
-        player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
 
-        //TODO: use player#setglowing (to avoid particles)
-        player.addPotionEffect(PotionEffectType.GLOWING.createEffect(8, 0));
+        //TODO: make configurable
+        if (shieldHealth > shield.getMaxShieldStrength() / 4)
+            player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
+        else
+            player.playSound(player.getLocation(), "fortress.lowshieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
+
+        instance.timedGlow(player, 8L);
+
+        instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
     }
 
     //Shields prevent armor from taking damage (since they ignore armor resistances)
@@ -220,5 +227,7 @@ public class ShieldManager implements Listener
     public float r4nd0m(float min, float max) {
         return (float)ThreadLocalRandom.current().nextDouble(min, max + 1.0D);
     }
+
+
 }
 
