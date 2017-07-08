@@ -68,6 +68,7 @@ public class ShieldManager implements Listener
     private void onQuit(PlayerQuitEvent event)
     {
         playersWithDamagedShields.remove(event.getPlayer());
+        event.getPlayer().removeMetadata("AS_SHIELD", instance);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
@@ -80,7 +81,7 @@ public class ShieldManager implements Listener
 
         if (!hasShield(player))
             return;
-        
+
         getShield(player).resetRegenCounter();
         playersWithDamagedShields.add(player);
         Shield shield = getShield(player);

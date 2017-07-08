@@ -42,6 +42,12 @@ public class AbsorptionShields extends JavaPlugin
         getCommand("createshield").setExecutor(new ConvertShieldCommand(this, configManager));
     }
 
+    public void onDisable()
+    {
+        for (Player player : getServer().getOnlinePlayers())
+            player.removeMetadata("AS_SHIELD", this);
+    }
+
     public ItemStack convertToShield(String shieldName, ItemStack itemStack)
     {
         if (!configManager.isValidShieldName(shieldName, false))
