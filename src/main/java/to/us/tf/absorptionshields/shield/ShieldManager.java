@@ -77,13 +77,13 @@ public class ShieldManager implements Listener
             return;
 
         getShield(player).resetRegenCounter();
+        playersWithDamagedShields.add(player);
 
         float shieldHealth = shieldUtils.getShieldHealth(player);
         if (shieldHealth <= 0f)
             return;
 
-        //cache player for shield regeneration
-        playersWithDamagedShields.add(player);
+
 
         //DamageModifier API is deprecated and will likely be removed soon; this'll have to do.
         //TODO: does getDamage factor in damage before armor/absorption/etc.???????? (seems it does, which is what we want)
@@ -153,7 +153,7 @@ public class ShieldManager implements Listener
         shieldUtils.setShieldHealth(player, 0);
 
         //TODO: allow customization
-        player.playSound(player.getLocation(), "fortress.shieldbroken", SoundCategory.PLAYERS, 1.0f, 1.0f);
+        player.playSound(player.getLocation(), "fortress.shieldbroken", SoundCategory.PLAYERS, 3000000f, 1.0f);
     }
 
     /**
