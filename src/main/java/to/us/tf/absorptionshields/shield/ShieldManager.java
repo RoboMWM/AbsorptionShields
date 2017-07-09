@@ -113,7 +113,7 @@ public class ShieldManager implements Listener
         shieldUtils.setShieldHealth(player, shieldHealth);
 
         //TODO: make configurable
-        if (shieldHealth > shield.getMaxShieldStrength() / 4)
+        if (shieldHealth > shield.getMaxShieldStrength() / 3)
             player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
         else
             player.playSound(player.getLocation(), "fortress.lowshieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
