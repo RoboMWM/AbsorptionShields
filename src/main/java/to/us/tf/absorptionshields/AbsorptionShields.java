@@ -21,10 +21,16 @@ import java.util.List;
 public class AbsorptionShields extends JavaPlugin
 {
     ConfigManager configManager;
+    ShieldUtils shieldUtils;
+
+    public ShieldUtils getShieldUtils()
+    {
+        return shieldUtils;
+    }
 
     public void onEnable()
     {
-        ShieldUtils shieldUtils = null;
+
         try
         {
             shieldUtils = new ShieldUtils(this);
