@@ -112,12 +112,19 @@ public class ShieldManager implements Listener
 
         shieldUtils.setShieldHealth(player, shieldHealth);
 
-        //TODO: make configurable
-        if (shieldHealth > shield.getMaxShieldStrength() / 3)
-            player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
-        else
-            player.playSound(player.getLocation(), "fortress.lowshieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
-
+        switch (event.getCause())
+        {
+            case FALL:
+            case DROWNING:
+                break;
+            default:
+                //TODO: make configurable
+                if (shieldHealth > shield.getMaxShieldStrength() / 3)
+                    player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
+                else
+                    player.playSound(player.getLocation(), "fortress.lowshieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
+        }
+        
         instance.timedGlow(player, 8L);
 
         instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
