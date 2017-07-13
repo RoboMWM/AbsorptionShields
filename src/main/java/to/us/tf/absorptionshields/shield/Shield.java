@@ -34,6 +34,8 @@ public class Shield
         this.maxShieldStrength = template.maxShieldStrength;
         this.regenTime = template.regenTime;
         this.regenRate = template.regenRate;
+
+        this.regenCounter = regenTime;
     }
 
     public void resetRegenCounter()
