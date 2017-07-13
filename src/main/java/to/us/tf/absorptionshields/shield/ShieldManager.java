@@ -124,7 +124,7 @@ public class ShieldManager implements Listener
                 else
                     player.playSound(player.getLocation(), "fortress.lowshieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
         }
-        
+
         instance.timedGlow(player, 8L);
 
         instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
