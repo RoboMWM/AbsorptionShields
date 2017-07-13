@@ -3,6 +3,8 @@ version: ${project.version}
 #website:
 author: RoboMWM
 main: to.us.tf.absorptionshields.AbsorptionShields
+softdepend:
+- Crackshot
 commands:
   createshield:
       description: Converts the item you are holding into a shield
