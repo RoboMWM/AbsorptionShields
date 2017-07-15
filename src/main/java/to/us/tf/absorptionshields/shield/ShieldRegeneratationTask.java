@@ -1,8 +1,10 @@
 package to.us.tf.absorptionshields.shield;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -60,6 +62,10 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             //Regen
             if (shieldHealth < shield.getMaxShieldStrength())
             {
+                EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, 0, EntityRegainHealthEvent.RegainReason.CUSTOM);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled())
+                    continue;
                 float amountToRegen = shield.getRegenRate() / (20L / rateToCheck);
                 float missingShield = shield.getMaxShieldStrength() - shieldHealth;
                 //TODO: regeneration sound effect with pitch? (Should be an option perhaps, can be annoying depending on gameplay type)
