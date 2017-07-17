@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,6 +34,7 @@ public class ShieldManager implements Listener
     AbsorptionShields instance;
     ShieldUtils shieldUtils;
     ConfigManager configManager;
+    ShieldTrackerTask shieldTrackerTask;
 
     private Set<Player> playersWithDamagedShields = new HashSet<>(); //Cache of players who need shields to be regenerated
 
@@ -60,13 +62,15 @@ public class ShieldManager implements Listener
 
         //Schedule tasks
         new ShieldRegeneratationTask(this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
-        new ShieldTrackerTask(plugin, this, configManager).runTaskTimer(plugin, 300L, 20L);
+        ShieldTrackerTask shieldTrackerTask = new ShieldTrackerTask(plugin, this, configManager);
+        shieldTrackerTask.runTaskTimer(plugin, 300L, 20L);
     }
 
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     private void onQuit(PlayerQuitEvent event)
     {
+        shieldTrackerTask.addRemoveShield(event.getPlayer());
         playersWithDamagedShields.remove(event.getPlayer());
         event.getPlayer().removeMetadata("AS_SHIELD", instance);
     }

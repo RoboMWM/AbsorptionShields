@@ -1,6 +1,8 @@
 package to.us.tf.absorptionshields.shield;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -31,29 +33,36 @@ public class ShieldTrackerTask extends BukkitRunnable
     {
         for (Player player : instance.getServer().getOnlinePlayers())
         {
-            Shield shield = shieldManager.getShield(player);
-            String wearingShieldName = shieldManager.getWornShield(player);
+            addRemoveShield(player);
+        }
+    }
 
-            if (shield == null && wearingShieldName == null)
-                continue;
+    public void addRemoveShield(Player player)
+    {
+        Shield shield = shieldManager.getShield(player);
+        String wearingShieldName = shieldManager.getWornShield(player);
 
-            //Add a shield
-            if (shield == null && wearingShieldName != null)
+        if (shield == null && wearingShieldName == null)
+            return;
+
+        //Add a shield
+        if (shield == null && wearingShieldName != null)
+        {
+            player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName, true)));
+            shieldManager.addPlayerWithDamagedShield(player);
+            return;
+        }
+
+        if (shield != null)
+        {
+            //Delete a shield
+            if (wearingShieldName == null || !wearingShieldName.equalsIgnoreCase(shield.getName()))
             {
-                player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName, true)));
-                shieldManager.addPlayerWithDamagedShield(player);
-                continue;
-            }
-
-            if (shield != null)
-            {
-                //Delete a shield
-                if (wearingShieldName == null || !wearingShieldName.equalsIgnoreCase(shield.getName()))
-                {
-                    player.removeMetadata("AS_SHIELD", instance);
-                    shieldManager.shatterShield(player);
-                    continue;
-                }
+                player.removeMetadata("AS_SHIELD", instance);
+                shieldManager.shatterShield(player);
+                EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, 0, EntityRegainHealthEvent.RegainReason.CUSTOM);
+                Bukkit.getPluginManager().callEvent(event);
+                return;
             }
         }
     }

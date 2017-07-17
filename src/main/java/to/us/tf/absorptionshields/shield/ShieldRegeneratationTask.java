@@ -38,7 +38,7 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             //No longer has an active shield
             if (!shieldManager.hasShield(player))
             {
-                shieldManager.addPlayerWithDamagedShield(player);
+                shieldManager.removePlayerWithDamagedShield(player);
                 continue;
             }
 
