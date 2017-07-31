@@ -102,7 +102,7 @@ public class AbsorptionShields extends JavaPlugin
 
         List<String> lore = new ArrayList<>();
 
-        loreToAdd = WordUtils.wrap(ChatColor.translateAlternateColorCodes('&', loreToAdd), 40);
+        loreToAdd = WordUtils.wrap(ChatColor.translateAlternateColorCodes('&', loreToAdd), 50, "\n", false);
         String[] loreToAddArray = loreToAdd.split("\n");
         lore.addAll(Arrays.asList(loreToAddArray));
 
