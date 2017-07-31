@@ -80,6 +80,8 @@ public class ConfigManager
 
     public boolean isValidShieldName(String name, boolean formatted)
     {
+        if (name == null || name.isEmpty())
+            return false;
         if (formatted)
             return shields.containsKey(name);
         return unformattedShieldNameConverter.containsKey(name) && shields.containsKey(unformattedShieldNameConverter.get(name));

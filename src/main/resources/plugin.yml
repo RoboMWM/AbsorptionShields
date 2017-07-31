@@ -14,10 +14,6 @@ commands:
       description: Adds lore to a shield item
       permission: absorptionshields.createshield
       permission-message: Hmm, this command isn't for you.
-  deletelore:
-      description: Deletes lore from a shield item
-      permission: absorptionshields.createshield
-      permission-message: Hmm, this command isn't for you.
 permissions:
     absorptionshields.*:
         description: Grants ALL THE THINGS

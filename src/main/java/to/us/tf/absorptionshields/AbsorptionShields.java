@@ -11,13 +11,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import to.us.tf.absorptionshields.command.AddLoreCommand;
 import to.us.tf.absorptionshields.command.ConvertShieldCommand;
-import to.us.tf.absorptionshields.command.DeleteLoreCommand;
 import to.us.tf.absorptionshields.shield.Shield;
 import to.us.tf.absorptionshields.shield.ShieldManager;
 import to.us.tf.absorptionshields.shield.ShieldUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,7 +54,6 @@ public class AbsorptionShields extends JavaPlugin
         new ShieldManager(this, shieldUtils, configManager);
         getCommand("createshield").setExecutor(new ConvertShieldCommand(this, configManager));
         getCommand("addlore").setExecutor(new AddLoreCommand(this));
-        getCommand("deletelore").setExecutor(new DeleteLoreCommand(this));
     }
 
     public void onDisable()
@@ -71,83 +70,44 @@ public class AbsorptionShields extends JavaPlugin
         Shield shield = configManager.createShield(shieldName, false);
         ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
         itemMeta.setDisplayName(shield.getName());
-
-        if (!itemMeta.hasLore())
-            itemMeta.setLore(new ArrayList<>());
-
-        List<String> lore = itemMeta.getLore(); //TODO: copy or actual list?
-        Iterator<String> loreIterator = lore.listIterator();
-        int index = 3;
-        //TODO: configurable...
-        while (loreIterator.hasNext())
-        {
-            if (loreIterator.next().equals(ChatColor.WHITE + "Shield Stats:"))
-                break;
-        }
-
-        while (loreIterator.hasNext())
-        {
-            lore.remove(loreIterator.next());
-        }
-
-        lore.add(ChatColor.WHITE + "Stats:");
-        lore.add(ChatColor.GOLD + "Capacity: " + shield.getMaxShieldStrength());
-        lore.add(ChatColor.YELLOW + "Recharge Rate: " + shield.getRegenRate());
-        lore.add(ChatColor.YELLOW + "Recharge Delay: " + shield.getRegenTime());
-
-        itemMeta.setLore(lore);
+        itemMeta.setLore(getStats(shield));
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    public List<String> getStats(Shield shield)
+    {
+        List<String> lore = new ArrayList<>();
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        //TODO: configurable...
+        lore.add(ChatColor.YELLOW + "AbsorptionShield Stats:");
+        lore.add(ChatColor.GOLD + "Capacity: " + shield.getMaxShieldStrength());
+        lore.add(ChatColor.GOLD + "Recharge Rate: " + shield.getRegenRate());
+        lore.add(ChatColor.GOLD + "Recharge Delay: " + df.format(shield.getRegenTime() / 20L));
+
+        return lore;
     }
 
     public ItemStack addLore(ItemStack itemStack, String loreToAdd)
     {
         ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
+        String shieldName = itemMeta.getDisplayName();
 
-        if (!configManager.isValidShieldName(itemMeta.getDisplayName(), false))
+        if (!configManager.isValidShieldName(shieldName, false))
             return null;
 
-        //Assume this is a validly-formatted shield
+        Shield shield = configManager.createShield(shieldName, false);
 
-        List<String> lore = itemMeta.getLore();
-        Iterator<String> loreIterator = lore.listIterator();
-        int index = 0;
-        //TODO: configurable...
-        while (loreIterator.hasNext())
-        {
-            if (loreIterator.next().equals(ChatColor.WHITE + "Shield Stats:"))
-                break;
-            index++;
-        }
+        List<String> lore = new ArrayList<>();
 
         loreToAdd = WordUtils.wrap(ChatColor.translateAlternateColorCodes('&', loreToAdd), 40);
         String[] loreToAddArray = loreToAdd.split("\n");
-        for (String line : loreToAddArray)
-            lore.add(index++, line);
+        lore.addAll(Arrays.asList(loreToAddArray));
 
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
-    }
-
-    public ItemStack deleteLore(ItemStack itemStack)
-    {
-        ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
-
-        if (!configManager.isValidShieldName(itemMeta.getDisplayName(), false))
-            return null;
-
-        //Assume this is a validly-formatted shield
-
-        List<String> lore = itemMeta.getLore();
-        Iterator<String> loreIterator = lore.listIterator();
-
-        while (loreIterator.hasNext())
-        {
-            if (loreIterator.next().equals(ChatColor.WHITE + "Shield Stats:"))
-                break;
-            lore.remove(0);
-        }
+        //Append stats at end
+        lore.add("");
+        lore.addAll(getStats(shield));
 
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
