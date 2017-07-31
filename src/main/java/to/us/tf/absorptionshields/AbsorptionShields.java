@@ -81,10 +81,11 @@ public class AbsorptionShields extends JavaPlugin
         DecimalFormat df = new DecimalFormat("#.##");
 
         //TODO: configurable...
+        lore.add("");
         lore.add(ChatColor.YELLOW + "AbsorptionShield Stats:");
-        lore.add(ChatColor.GOLD + "Capacity: " + ChatColor.YELLOW + shield.getMaxShieldStrength());
-        lore.add(ChatColor.GOLD + "Recharge Rate: " + ChatColor.YELLOW + shield.getRegenRate());
-        lore.add(ChatColor.GOLD + "Recharge Delay: " + ChatColor.YELLOW + df.format(shield.getRegenTime() / 20L));
+        lore.add(ChatColor.GOLD + "- Capacity: " + ChatColor.YELLOW + shield.getMaxShieldStrength());
+        lore.add(ChatColor.GOLD + "- Recharge Rate: " + ChatColor.YELLOW + shield.getRegenRate());
+        lore.add(ChatColor.GOLD + "- Recharge Delay: " + ChatColor.YELLOW + df.format(shield.getRegenTime() / 20L));
 
         return lore;
     }
@@ -106,7 +107,6 @@ public class AbsorptionShields extends JavaPlugin
         lore.addAll(Arrays.asList(loreToAddArray));
 
         //Append stats at end
-        lore.add("");
         lore.addAll(getStats(shield));
 
         itemMeta.setLore(lore);
