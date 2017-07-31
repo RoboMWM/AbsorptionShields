@@ -10,6 +10,14 @@ commands:
       description: Converts the item you are holding into a shield
       permission: absorptionshields.createshield
       permission-message: Hmm, this command isn't for you.
+  addlore:
+      description: Adds lore to a shield item
+      permission: absorptionshields.createshield
+      permission-message: Hmm, this command isn't for you.
+  deletelore:
+      description: Deletes lore from a shield item
+      permission: absorptionshields.createshield
+      permission-message: Hmm, this command isn't for you.
 permissions:
     absorptionshields.*:
         description: Grants ALL THE THINGS

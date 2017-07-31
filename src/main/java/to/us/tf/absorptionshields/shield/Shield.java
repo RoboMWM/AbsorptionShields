@@ -65,6 +65,11 @@ public class Shield
         return regenRate;
     }
 
+    public long getRegenTime()
+    {
+        return regenTime;
+    }
+
     public String getName()
     {
         return name;
