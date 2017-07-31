@@ -82,22 +82,22 @@ public class AbsorptionShields extends JavaPlugin
 
         //TODO: configurable...
         lore.add(ChatColor.YELLOW + "AbsorptionShield Stats:");
-        lore.add(ChatColor.GOLD + "Capacity: " + shield.getMaxShieldStrength());
-        lore.add(ChatColor.GOLD + "Recharge Rate: " + shield.getRegenRate());
-        lore.add(ChatColor.GOLD + "Recharge Delay: " + df.format(shield.getRegenTime() / 20L));
+        lore.add(ChatColor.GOLD + "Capacity: " + ChatColor.YELLOW + shield.getMaxShieldStrength());
+        lore.add(ChatColor.GOLD + "Recharge Rate: " + ChatColor.YELLOW + shield.getRegenRate());
+        lore.add(ChatColor.GOLD + "Recharge Delay: " + ChatColor.YELLOW + df.format(shield.getRegenTime() / 20L));
 
         return lore;
     }
 
-    public ItemStack addLore(ItemStack itemStack, String loreToAdd)
+    public ItemStack addLore(String loreToAdd, ItemStack itemStack)
     {
         ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
         String shieldName = itemMeta.getDisplayName();
 
-        if (!configManager.isValidShieldName(shieldName, false))
+        if (!configManager.isValidShieldName(shieldName, true))
             return null;
 
-        Shield shield = configManager.createShield(shieldName, false);
+        Shield shield = configManager.createShield(shieldName, true);
 
         List<String> lore = new ArrayList<>();
 

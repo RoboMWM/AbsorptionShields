@@ -48,7 +48,7 @@ public class AddLoreCommand implements CommandExecutor
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        player.getInventory().setItemInMainHand(instance.addLore(itemStack, String.join(" ", args)));
+        player.getInventory().setItemInMainHand(instance.addLore(String.join(" ", args), itemStack));
 
         return true;
     }
