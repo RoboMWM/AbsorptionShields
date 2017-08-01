@@ -91,15 +91,14 @@ public class ShieldManager implements Listener
         Shield shield = getShield(player);
         shield.resetRegenCounter();
 
+        final double originalDamage = event.getDamage(); //We might need to get this from a lower-priority listener.
         final float originalShieldHealth = shieldUtils.getShieldHealth(player);
         float shieldHealth = originalShieldHealth;
         if (shieldHealth <= 0f)
             return;
 
-
-
         //DamageModifier API is deprecated and will likely be removed soon; this'll have to do.
-        //TODO: does getDamage factor in damage before armor/absorption/etc.???????? (seems it does, which is what we want)
+        //getDamage factors in damage before armor/absorption/etc.
 
         shieldHealth -= event.getDamage();
 
@@ -107,8 +106,9 @@ public class ShieldManager implements Listener
         //Shield broken
         if (shieldHealth <= 0f)
         {
-            shieldHealth = -shieldHealth; //Unless -shieldHealth does this already. Idk. I don't use the - operator all that much.
-            event.setDamage(shieldHealth);
+            //The following was removed since CB or whatever handles this for us
+            //shieldHealth = -shieldHealth; //Unless -shieldHealth does this already. Idk. I don't use the - operator all that much.
+            //event.setDamage(shieldHealth);
             shatterShield(player);
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
             instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
@@ -133,8 +133,21 @@ public class ShieldManager implements Listener
         instance.timedGlow(player, 8L);
 
         instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
+
         event.setDamage(0);
+
+//        if (event.getFinalDamage() != 0)
+//            event.setDamage(-event.getFinalDamage());
     }
+
+    /*The resistance modifier is computed according to the original damage value.
+    //If damage is over half the current shield strength, the resistance modifier will cause #getFinalDamage to return a negative value
+    //This is because the player now has less absorption hearts to cover the cost of the _original damage._
+    //Unfortunately, CB appears to just take the absolute value of #getFinalDamage and damage the entity anyways...
+    HOWEVER!
+    Even though the resistance value uses the original damage value in its computation,
+     this computation can be recalculated with new resistance attributes via calling event#setDamage (I think)!
+    */
 
     //Shields prevent armor from taking damage (since they ignore armor resistances)
     @EventHandler(ignoreCancelled = true)
