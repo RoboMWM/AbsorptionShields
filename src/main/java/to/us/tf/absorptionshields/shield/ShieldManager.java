@@ -91,7 +91,8 @@ public class ShieldManager implements Listener
         Shield shield = getShield(player);
         shield.resetRegenCounter();
 
-        float shieldHealth = shieldUtils.getShieldHealth(player);
+        final float originalShieldHealth = shieldUtils.getShieldHealth(player);
+        float shieldHealth = originalShieldHealth;
         if (shieldHealth <= 0f)
             return;
 
@@ -104,13 +105,13 @@ public class ShieldManager implements Listener
 
         //TODO: make configurable
         //Shield broken
-        if (shieldHealth <= 0)
+        if (shieldHealth <= 0f)
         {
             shieldHealth = -shieldHealth; //Unless -shieldHealth does this already. Idk. I don't use the - operator all that much.
             event.setDamage(shieldHealth);
             shatterShield(player);
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
-            instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, shieldHealth, event));
+            instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
             return;
         }
 
@@ -123,7 +124,7 @@ public class ShieldManager implements Listener
                 break;
             default:
                 //TODO: make configurable
-                if (shieldHealth > shield.getMaxShieldStrength() / 3)
+                if (shieldHealth > shield.getMaxShieldStrength() / 3f)
                     player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
                 else
                     player.playSound(player.getLocation(), "fortress.lowshieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
@@ -139,7 +140,7 @@ public class ShieldManager implements Listener
     @EventHandler(ignoreCancelled = true)
     private void onArmorDamage(PlayerItemDamageEvent event)
     {
-        if (shieldUtils.getShieldHealth(event.getPlayer()) <= 0)
+        if (shieldUtils.getShieldHealth(event.getPlayer()) <= 0f)
             return;
 
         if (isArmor(event.getItem().getType()))
@@ -169,9 +170,9 @@ public class ShieldManager implements Listener
      */
     public void shatterShield(Player player)
     {
-        if (shieldUtils.getShieldHealth(player) <= 0)
+        if (shieldUtils.getShieldHealth(player) <= 0f)
             return;
-        shieldUtils.setShieldHealth(player, 0);
+        shieldUtils.setShieldHealth(player, 0f);
 
         //TODO: allow customization
         player.playSound(player.getLocation(), "fortress.shieldbroken", SoundCategory.PLAYERS, 3000000f, 1.0f);

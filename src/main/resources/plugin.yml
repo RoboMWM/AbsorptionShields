@@ -4,7 +4,8 @@ version: ${project.version}
 author: RoboMWM
 main: to.us.tf.absorptionshields.AbsorptionShields
 softdepend:
-- Crackshot
+- CrackShot
+- ExtraHardMode
 commands:
   createshield:
       description: Converts the item you are holding into a shield

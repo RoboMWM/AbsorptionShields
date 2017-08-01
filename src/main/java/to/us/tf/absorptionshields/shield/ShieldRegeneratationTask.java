@@ -72,7 +72,7 @@ public class ShieldRegeneratationTask extends BukkitRunnable
                 //player.playSound(player.getLocation(), Sound.BLOCK_NOTE_CHIME, 0.5f, 0.5f + (shieldHealth / (shield.getMaxShieldStrength() / 1.5f)));
 
                 //TODO: make configurable
-                if (shieldHealth <= 0)
+                if (shieldHealth <= 0f)
                     player.playSound(player.getLocation(), "fortress.shieldbootingup", SoundCategory.PLAYERS, 3000000f, 1f);
 
                 //Top off if near full
