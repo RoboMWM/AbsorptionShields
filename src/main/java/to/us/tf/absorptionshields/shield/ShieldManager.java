@@ -109,7 +109,9 @@ public class ShieldManager implements Listener
             shatterShield(player);
             //Then set the raw damage (event#setDamage currently does a bunch of other junk)
             event.setDamage(EntityDamageEvent.DamageModifier.BASE, -shieldHealth);
-            //event#getFinalDamage will still result in a negative value for some reason
+            //Remove absorption resistance modifier from event#getFinalDamage calculation (please _properly_ recalculate resistances if you get rid of the DamageModifier API, md_5.)
+            event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+            
             //TODO: make configurable
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
             instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
@@ -122,6 +124,9 @@ public class ShieldManager implements Listener
         //https://hub.spigotmc.org/jira/browse/SPIGOT-3484
         //Update: We'll just set raw damage anyways just in case
         event.setDamage(EntityDamageEvent.DamageModifier.BASE, 0);
+        //resistance modifiers aren't updated if we just modify the base damage apparently...
+        //Technically, we should 0 out all the other resistance modifiers, but we already have the damage for those blocked in PlayerItemDamageEvent.
+        event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
 
         shieldUtils.setShieldHealth(player, shieldHealth);
 
