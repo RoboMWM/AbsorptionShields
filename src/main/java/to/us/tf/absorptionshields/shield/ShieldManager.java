@@ -91,7 +91,7 @@ public class ShieldManager implements Listener
         Shield shield = getShield(player);
         shield.resetRegenCounter();
 
-        final double originalDamage = event.getDamage(); //We might need to get this from a lower-priority listener.
+        final double originalDamage = event.getDamage(); //We might need to get this from a lower-priority listener, in case a plugin uses #setDamage.
         final float originalShieldHealth = shieldUtils.getShieldHealth(player);
         float shieldHealth = originalShieldHealth;
         if (shieldHealth <= 0f)
@@ -102,14 +102,15 @@ public class ShieldManager implements Listener
 
         shieldHealth -= event.getDamage();
 
-        //TODO: make configurable
         //Shield broken
         if (shieldHealth <= 0f)
         {
             //Remove the absorption hearts _first_
             shatterShield(player);
-            //Then call setDamage (which also recalculates resistance attributes)
-            event.setDamage(-shieldHealth);
+            //Then set the raw damage (event#setDamage currently does a bunch of other junk)
+            event.setDamage(EntityDamageEvent.DamageModifier.BASE, -shieldHealth);
+            //event#getFinalDamage will still result in a negative value for some reason
+            //TODO: make configurable
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
             instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
             return;
@@ -119,7 +120,8 @@ public class ShieldManager implements Listener
         //So we set it _before_ modifying resistance attributes, such as absorption hearts.
         //This way, we avoid event#getFinalDamage from becoming a negative value (and thus dealing extra damage to absorption hearts).
         //https://hub.spigotmc.org/jira/browse/SPIGOT-3484
-        event.setDamage(0);
+        //Update: We'll just set raw damage anyways just in case
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, 0);
 
         shieldUtils.setShieldHealth(player, shieldHealth);
 
