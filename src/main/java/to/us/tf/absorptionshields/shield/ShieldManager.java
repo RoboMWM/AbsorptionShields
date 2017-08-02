@@ -111,7 +111,10 @@ public class ShieldManager implements Listener
             event.setDamage(EntityDamageEvent.DamageModifier.BASE, -shieldHealth);
             //Remove absorption resistance modifier from event#getFinalDamage calculation (please _properly_ recalculate resistances if you get rid of the DamageModifier API, md_5.)
             event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
-            
+
+            //If DamageModifiers do indeed disappear:
+            //event.setDamage(originalDamage + originalShieldHealth); //ensures we apply enough damage to surpass the absorption modifier, but still retain other resistances
+
             //TODO: make configurable
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
             instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
