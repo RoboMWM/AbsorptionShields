@@ -106,14 +106,20 @@ public class ShieldManager implements Listener
         //Shield broken
         if (shieldHealth <= 0f)
         {
-            //The following was removed since CB or whatever handles this for us
-            //shieldHealth = -shieldHealth; //Unless -shieldHealth does this already. Idk. I don't use the - operator all that much.
-            //event.setDamage(shieldHealth);
+            //Remove the absorption hearts _first_
             shatterShield(player);
+            //Then call setDamage (which also recalculates resistance attributes)
+            event.setDamage(-shieldHealth);
             player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
             instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
             return;
         }
+
+        //event#setDamage causes the resistance modifier to be recalculated with the _original_ damage value
+        //So we set it _before_ modifying resistance attributes, such as absorption hearts.
+        //This way, we avoid event#getFinalDamage from becoming a negative value (and thus dealing extra damage to absorption hearts).
+        //https://hub.spigotmc.org/jira/browse/SPIGOT-3484
+        event.setDamage(0);
 
         shieldUtils.setShieldHealth(player, shieldHealth);
 
@@ -133,11 +139,6 @@ public class ShieldManager implements Listener
         instance.timedGlow(player, 8L);
 
         instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
-
-        event.setDamage(0);
-
-//        if (event.getFinalDamage() != 0)
-//            event.setDamage(-event.getFinalDamage());
     }
 
     /*The resistance modifier is computed according to the original damage value.
