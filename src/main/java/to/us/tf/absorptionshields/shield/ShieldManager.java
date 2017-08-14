@@ -148,7 +148,7 @@ public class ShieldManager implements Listener
 
         instance.timedGlow(player, 8L);
 
-        instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
+        instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalDamage, event));
     }
 
     /*The resistance modifier is computed according to the original damage value.
