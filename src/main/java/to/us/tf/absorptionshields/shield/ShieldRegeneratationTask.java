@@ -19,10 +19,10 @@ import to.us.tf.absorptionshields.AbsorptionShields;
  */
 public class ShieldRegeneratationTask extends BukkitRunnable
 {
-    AbsorptionShields instance;
-    ShieldManager shieldManager;
-    ShieldUtils shieldUtils;
-    long rateToCheck;
+    private AbsorptionShields instance;
+    private ShieldManager shieldManager;
+    private ShieldUtils shieldUtils;
+    private long rateToCheck;
 
     ShieldRegeneratationTask(AbsorptionShields plugin, ShieldManager shieldManager, ShieldUtils shieldUtils, long rate)
     {

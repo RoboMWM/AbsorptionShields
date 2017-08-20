@@ -61,7 +61,7 @@ public class ShieldManager implements Listener
         this.instance = plugin;
 
         //Schedule tasks
-        new ShieldRegeneratationTask(this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
+        new ShieldRegeneratationTask(instance, this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
         shieldTrackerTask = new ShieldTrackerTask(plugin, this, configManager);
         shieldTrackerTask.runTaskTimer(plugin, 300L, 20L);
     }
