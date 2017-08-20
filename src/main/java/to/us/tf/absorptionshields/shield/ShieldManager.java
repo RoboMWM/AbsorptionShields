@@ -75,7 +75,7 @@ public class ShieldManager implements Listener
         event.getPlayer().removeMetadata("AS_SHIELD", instance);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onPlayerDamaged(EntityDamageEvent event)
     {
         if (event.getEntityType() != EntityType.PLAYER)
@@ -91,7 +91,7 @@ public class ShieldManager implements Listener
         Shield shield = getShield(player);
         shield.resetRegenCounter();
 
-        final double originalDamage = event.getDamage(); //We might need to get this from a lower-priority listener.
+        final double originalDamage = event.getDamage(); //We might need to get this from a lower-priority listener, in case a plugin uses #setDamage.
         final float originalShieldHealth = shieldUtils.getShieldHealth(player);
         float shieldHealth = originalShieldHealth;
         if (shieldHealth <= 0f)
@@ -102,18 +102,33 @@ public class ShieldManager implements Listener
 
         shieldHealth -= event.getDamage();
 
-        //TODO: make configurable
         //Shield broken
         if (shieldHealth <= 0f)
         {
-            //The following was removed since CB or whatever handles this for us
-            //shieldHealth = -shieldHealth; //Unless -shieldHealth does this already. Idk. I don't use the - operator all that much.
-            //event.setDamage(shieldHealth);
+            //Remove the absorption hearts _first_
             shatterShield(player);
+            //Then set the raw damage (event#setDamage currently does a bunch of other junk)
+            event.setDamage(EntityDamageEvent.DamageModifier.BASE, -shieldHealth);
+            //Remove absorption resistance modifier from event#getFinalDamage calculation (please _properly_ recalculate resistances if you get rid of the DamageModifier API, md_5.)
+            event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
+
+            //If DamageModifiers do indeed disappear:
+            //event.setDamage(originalDamage + originalShieldHealth); //ensures we apply enough damage to surpass the absorption modifier, but still retain other resistances
+
             configManager.playSound(player, "shieldOfflineAlert", false);
             instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
             return;
         }
+
+        //event#setDamage causes the resistance modifier to be recalculated with the _original_ damage value
+        //So we set it _before_ modifying resistance attributes, such as absorption hearts.
+        //This way, we avoid event#getFinalDamage from becoming a negative value (and thus dealing extra damage to absorption hearts).
+        //https://hub.spigotmc.org/jira/browse/SPIGOT-3484
+        //Update: We'll just set raw damage anyways just in case
+        event.setDamage(EntityDamageEvent.DamageModifier.BASE, 0);
+        //resistance modifiers aren't updated if we just modify the base damage apparently...
+        //Technically, we should 0 out all the other resistance modifiers, but we already have the damage for those blocked in PlayerItemDamageEvent.
+        event.setDamage(EntityDamageEvent.DamageModifier.ABSORPTION, 0);
 
         shieldUtils.setShieldHealth(player, shieldHealth);
 
@@ -132,12 +147,7 @@ public class ShieldManager implements Listener
 
         instance.timedGlow(player, 8L);
 
-        instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, event.getDamage(), event));
-
-        event.setDamage(0);
-
-//        if (event.getFinalDamage() != 0)
-//            event.setDamage(-event.getFinalDamage());
+        instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalDamage, event));
     }
 
     /*The resistance modifier is computed according to the original damage value.
