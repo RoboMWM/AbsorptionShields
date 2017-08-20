@@ -6,6 +6,7 @@ main: to.us.tf.absorptionshields.AbsorptionShields
 softdepend:
 - CrackShot
 - ExtraHardMode
+- MLGDamageIndicators
 commands:
   createshield:
       description: Converts the item you are holding into a shield

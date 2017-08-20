@@ -75,7 +75,7 @@ public class ShieldManager implements Listener
         event.getPlayer().removeMetadata("AS_SHIELD", instance);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     private void onPlayerDamaged(EntityDamageEvent event)
     {
         if (event.getEntityType() != EntityType.PLAYER)
