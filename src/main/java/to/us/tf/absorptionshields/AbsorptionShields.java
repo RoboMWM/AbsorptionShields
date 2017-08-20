@@ -88,7 +88,7 @@ public class AbsorptionShields extends JavaPlugin
         //TODO: configurable...
         lore.add("");
         lore.add(ChatColor.YELLOW + "AbsorptionShield Stats:");
-        lore.add(ChatColor.GOLD + "- Capacity: " + ChatColor.YELLOW + shield.getMaxShieldStrength());
+        lore.add(ChatColor.GOLD + "- Capacity: " + ChatColor.YELLOW + shield.getMaxShieldStrength() / 2);
         lore.add(ChatColor.GOLD + "- Recharge Rate: " + ChatColor.YELLOW + shield.getRegenRate());
         lore.add(ChatColor.GOLD + "- Recharge Delay: " + ChatColor.YELLOW + df.format(shield.getRegenTime() / 20L));
 
