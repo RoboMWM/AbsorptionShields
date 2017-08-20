@@ -62,6 +62,11 @@ public class AbsorptionShields extends JavaPlugin
             player.removeMetadata("AS_SHIELD", this);
     }
 
+    public ConfigManager getConfigManager()
+    {
+        return configManager;
+    }
+
     public ItemStack convertToShield(String shieldName, ItemStack itemStack)
     {
         if (!configManager.isValidShieldName(shieldName, false))

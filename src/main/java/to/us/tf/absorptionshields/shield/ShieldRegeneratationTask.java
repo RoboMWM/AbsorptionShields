@@ -6,28 +6,30 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import to.us.tf.absorptionshields.AbsorptionShields;
 
 /**
  * Created on 6/30/2017.
  * Shield regeneration task
  *
  * Initially I was going to stick this in the Shield object but
- * a) would have to cancel task when object is "deleted" and
- * b) would have to pass a plugin instance to each.
+ * would have to cancel task when object is "deleted"
  *
  * @author RoboMWM
  */
 public class ShieldRegeneratationTask extends BukkitRunnable
 {
+    AbsorptionShields instance;
     ShieldManager shieldManager;
     ShieldUtils shieldUtils;
     long rateToCheck;
 
-    ShieldRegeneratationTask(ShieldManager shieldManager, ShieldUtils shieldUtils, long rate)
+    ShieldRegeneratationTask(AbsorptionShields plugin, ShieldManager shieldManager, ShieldUtils shieldUtils, long rate)
     {
         this.shieldManager = shieldManager;
         this.shieldUtils = shieldUtils;
         this.rateToCheck = rate;
+        this.instance = plugin;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             {
                 shieldUtils.setShieldHealth(player, shield.getMaxShieldStrength());
                 shieldManager.removePlayerWithDamagedShield(player);
-                //TODO: shield regeneration complete sound
+                instance.getConfigManager().playSound(player, "shieldFullyRecharged", false);
                 continue;
             }
 
@@ -71,9 +73,8 @@ public class ShieldRegeneratationTask extends BukkitRunnable
                 //TODO: regeneration sound effect with pitch? (Should be an option perhaps, can be annoying depending on gameplay type)
                 //player.playSound(player.getLocation(), Sound.BLOCK_NOTE_CHIME, 0.5f, 0.5f + (shieldHealth / (shield.getMaxShieldStrength() / 1.5f)));
 
-                //TODO: make configurable
                 if (shieldHealth <= 0f)
-                    player.playSound(player.getLocation(), "fortress.shieldbootingup", SoundCategory.PLAYERS, 3000000f, 1f);
+                    instance.getConfigManager().playSound(player, "shieldBootingUp", false);
 
                 //Top off if near full
                 if (amountToRegen > missingShield)

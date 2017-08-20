@@ -61,7 +61,7 @@ public class ShieldTrackerTask extends BukkitRunnable
                 player.removeMetadata("AS_SHIELD", instance);
                 shieldManager.shatterShield(player);
 
-                //todo: should be a fake damage event
+                //todo: should be a fake damage event. (Right now being used to update HealthBar)
                 EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, 0, EntityRegainHealthEvent.RegainReason.CUSTOM);
                 Bukkit.getPluginManager().callEvent(event);
                 return;

@@ -110,7 +110,7 @@ public class ShieldManager implements Listener
             //shieldHealth = -shieldHealth; //Unless -shieldHealth does this already. Idk. I don't use the - operator all that much.
             //event.setDamage(shieldHealth);
             shatterShield(player);
-            player.playSound(player.getLocation(), "fortress.shieldoffline", SoundCategory.PLAYERS, 3000000f, 1.0f);
+            configManager.playSound(player, "shieldOfflineAlert", false);
             instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
             return;
         }
@@ -125,9 +125,9 @@ public class ShieldManager implements Listener
             default:
                 //TODO: make configurable
                 if (shieldHealth > shield.getMaxShieldStrength() / 3f)
-                    player.playSound(player.getLocation(), "fortress.shieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
+                    configManager.playSound(player, "shieldHitSelf", true);
                 else
-                    player.playSound(player.getLocation(), "fortress.lowshieldhitself", SoundCategory.PLAYERS, 3000000f, r4nd0m(0.8f, 1.2f));
+                    configManager.playSound(player, "lowShieldHitSelf", true);
         }
 
         instance.timedGlow(player, 8L);
@@ -186,9 +186,7 @@ public class ShieldManager implements Listener
         if (shieldUtils.getShieldHealth(player) <= 0f)
             return;
         shieldUtils.setShieldHealth(player, 0f);
-
-        //TODO: allow customization
-        player.playSound(player.getLocation(), "fortress.shieldbroken", SoundCategory.PLAYERS, 3000000f, 1.0f);
+        configManager.playSound(player, "shieldBroken", false);
     }
 
     /**
@@ -252,9 +250,7 @@ public class ShieldManager implements Listener
         return false;
     }
 
-    public float r4nd0m(float min, float max) {
-        return (float)ThreadLocalRandom.current().nextDouble(min, max + 1.0D);
-    }
+
 
 
 }
