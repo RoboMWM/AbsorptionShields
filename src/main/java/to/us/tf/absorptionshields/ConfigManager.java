@@ -38,7 +38,7 @@ public class ConfigManager
             soundsSection.set("shieldOfflineAlert", "fortress.shieldoffline");
             soundsSection.set("shieldBroken", "fortress.shieldbroken");
             soundsSection.set("shieldBootingUp", "fortress.shieldbootingup");
-            soundsSection.set("shieldFullyRecharged", "fortress.shieldRecharged");
+            soundsSection.set("shieldFullyRecharged", "fortress.shieldrecharged");
         }
         for (String soundKey : soundsSection.getKeys(false))
         {
