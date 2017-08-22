@@ -61,8 +61,6 @@ public class ConfigManager
             sponge.set("strength", 24);
             sponge.set("time", 5);
             sponge.set("rate", 1);
-            plugin.getLogger().info("Setup a new config");
-            plugin.saveConfig();
         }
         for (String sectionName : shieldsSection.getKeys(false))
         {
@@ -95,6 +93,8 @@ public class ConfigManager
             shields.put(sectionName, new Shield(sectionName, strength, time * 20L, rate));
             unformattedShieldNameConverter.put(ChatColor.stripColor(sectionName), sectionName);
         }
+
+        plugin.saveConfig();
     }
 
     public Set<String> getShieldNames()
