@@ -1,5 +1,7 @@
-package to.us.tf.absorptionshields;
+package com.robomwm.absorptionshields;
 
+import com.robomwm.absorptionshields.shield.Shield;
+import com.robomwm.absorptionshields.shield.ShieldManager;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,11 +11,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import to.us.tf.absorptionshields.command.AddLoreCommand;
-import to.us.tf.absorptionshields.command.ConvertShieldCommand;
-import to.us.tf.absorptionshields.shield.Shield;
-import to.us.tf.absorptionshields.shield.ShieldManager;
-import to.us.tf.absorptionshields.shield.ShieldUtils;
+import com.robomwm.absorptionshields.command.AddLoreCommand;
+import com.robomwm.absorptionshields.command.ConvertShieldCommand;
+import com.robomwm.absorptionshields.shield.ShieldUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

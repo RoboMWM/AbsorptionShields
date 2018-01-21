@@ -1,5 +1,6 @@
-package to.us.tf.absorptionshields.event;
+package com.robomwm.absorptionshields.event;
 
+import com.robomwm.absorptionshields.shield.ShieldManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -11,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
  * Called when a player takes shield damage
  * Called in between EntityDamageEvent (high priority)
  *
- * @see to.us.tf.absorptionshields.shield.ShieldManager
+ * @see ShieldManager
  * @author RoboMWM
  */
 public class ShieldDamageEvent extends Event

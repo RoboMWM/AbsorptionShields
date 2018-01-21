@@ -1,12 +1,10 @@
-package to.us.tf.absorptionshields.shield;
+package com.robomwm.absorptionshields.shield;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import to.us.tf.absorptionshields.AbsorptionShields;
+import com.robomwm.absorptionshields.AbsorptionShields;
 
 /**
  * Created on 6/30/2017.

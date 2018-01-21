@@ -1,4 +1,4 @@
-package to.us.tf.absorptionshields.shield;
+package com.robomwm.absorptionshields.shield;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -6,7 +6,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import to.us.tf.absorptionshields.ConfigManager;
+import com.robomwm.absorptionshields.ConfigManager;
 
 /**
  * Created on 6/30/2017.

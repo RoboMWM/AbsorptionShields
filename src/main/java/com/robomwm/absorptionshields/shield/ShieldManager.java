@@ -1,7 +1,6 @@
-package to.us.tf.absorptionshields.shield;
+package com.robomwm.absorptionshields.shield;
 
 import org.bukkit.Material;
-import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,20 +8,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffectType;
-import to.us.tf.absorptionshields.AbsorptionShields;
-import to.us.tf.absorptionshields.ConfigManager;
-import to.us.tf.absorptionshields.event.ShieldDamageEvent;
+import com.robomwm.absorptionshields.AbsorptionShields;
+import com.robomwm.absorptionshields.ConfigManager;
+import com.robomwm.absorptionshields.event.ShieldDamageEvent;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created on 3/18/2017.

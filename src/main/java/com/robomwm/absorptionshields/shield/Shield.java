@@ -1,4 +1,4 @@
-package to.us.tf.absorptionshields.shield;
+package com.robomwm.absorptionshields.shield;
 
 public class Shield
 {

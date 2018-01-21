@@ -1,14 +1,12 @@
-package to.us.tf.absorptionshields.command;
+package com.robomwm.absorptionshields.command;
 
-import org.bukkit.ChatColor;
+import com.robomwm.absorptionshields.AbsorptionShields;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import to.us.tf.absorptionshields.AbsorptionShields;
-import to.us.tf.absorptionshields.ConfigManager;
 
 /**
  * Created on 7/30/2017.

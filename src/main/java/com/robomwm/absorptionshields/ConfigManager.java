@@ -1,5 +1,6 @@
-package to.us.tf.absorptionshields;
+package com.robomwm.absorptionshields;
 
+import com.robomwm.absorptionshields.shield.Shield;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
@@ -7,7 +8,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import to.us.tf.absorptionshields.shield.Shield;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,11 +53,11 @@ public class ConfigManager
         if (shieldsSection == null)
         {
             shieldsSection = config.createSection("Shields");
-            ConfigurationSection bumbleBee = shieldsSection.createSection("&6BumbleBee");
+            ConfigurationSection bumbleBee = shieldsSection.createSection("&6bumblebee");
             bumbleBee.set("strength", 6);
             bumbleBee.set("time", 2);
             bumbleBee.set("rate", 3);
-            ConfigurationSection sponge = shieldsSection.createSection("&eSponge");
+            ConfigurationSection sponge = shieldsSection.createSection("&esponge");
             sponge.set("strength", 24);
             sponge.set("time", 5);
             sponge.set("rate", 1);

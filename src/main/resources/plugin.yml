@@ -2,7 +2,7 @@ name: AbsorptionShields
 version: ${project.version}
 #website:
 author: RoboMWM
-main: to.us.tf.absorptionshields.AbsorptionShields
+main: com.robomwm.absorptionshields.AbsorptionShields
 softdepend:
 - CrackShot
 - ExtraHardMode
