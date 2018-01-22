@@ -31,7 +31,7 @@ Shields:
     strength: 12 # Shield's max capacity in hearts
     time: 2 # Seconds before shield starts regenerating
     rate: 3 # How fast the shield recharges in hearts per second
-  '&eSponge':
+  '&esponge':
     strength: 24
     time: 5
     rate: 1
