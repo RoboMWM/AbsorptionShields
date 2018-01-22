@@ -3,7 +3,7 @@ Support this project on [Patreon!](https://patreon.com/RoboMWM)
 # AbsorptionShields
 Have you ever dreamed of a day where the "personal shield" mechanic from games like Borderlands, Halo, Overwatch, etc. were in Minecraft? No? Well I did. Thanks to the absorption health being an actual, editable field instead of just being chained to a potion, this is possible to do somewhat rather elegantly in Minecraft.
 
-## A video is worth a 60,000 words a second
+## A video is worth 60,000 words a second
 [Click to watch](https://www.youtube.com/watch?v=0GUw6ehtFXo)
 
 [![AbsortionShields demonstration video](http://img.youtube.com/vi/0GUw6ehtFXo/0.jpg)](https://www.youtube.com/watch?v=0GUw6ehtFXo)
