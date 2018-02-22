@@ -25,10 +25,10 @@ import java.util.Set;
  */
 public class ShieldManager implements Listener
 {
-    AbsorptionShields instance;
-    ShieldUtils shieldUtils;
-    ConfigManager configManager;
-    ShieldTrackerTask shieldTrackerTask;
+    private AbsorptionShields instance;
+    private ShieldUtils shieldUtils;
+    private ConfigManager configManager;
+    private ShieldTrackerTask shieldTrackerTask;
 
     private Set<Player> playersWithDamagedShields = new HashSet<>(); //Cache of players who need shields to be regenerated
 
@@ -69,7 +69,7 @@ public class ShieldManager implements Listener
         event.getPlayer().removeMetadata("AS_SHIELD", instance);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //TODO: change priority back to high once crackshot alternative exists
     private void onPlayerDamaged(EntityDamageEvent event)
     {
         if (event.getEntityType() != EntityType.PLAYER)
@@ -204,20 +204,18 @@ public class ShieldManager implements Listener
         ItemStack helmet = player.getInventory().getHelmet();
         if (helmet == null)
             return null;
-        if (!helmet.hasItemMeta())
+
+        if (!helmet.hasItemMeta() || !helmet.getItemMeta().hasDisplayName())
+        {
+            if (!configManager.isValidShieldName(helmet.getType().name().toLowerCase(), true))
+                return null;
+            return helmet.getType().name();
+        }
+
+        if (!configManager.isValidShieldName(helmet.getItemMeta().getDisplayName(), true))
             return null;
 
-        ItemMeta helmetMeta = helmet.getItemMeta();
-
-        if (!helmetMeta.hasDisplayName())
-            return null;
-
-        String name = helmetMeta.getDisplayName();
-
-        if (!configManager.isValidShieldName(name, true))
-            return null;
-
-        return name;
+        return helmet.getItemMeta().getDisplayName();
     }
 
     /**

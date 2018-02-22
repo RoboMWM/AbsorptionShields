@@ -1,6 +1,6 @@
 name: AbsorptionShields
 version: ${project.version}
-#website:
+website: http://robomwm.com
 author: RoboMWM
 main: com.robomwm.absorptionshields.AbsorptionShields
 softdepend:
