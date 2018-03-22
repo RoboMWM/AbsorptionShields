@@ -24,10 +24,11 @@ public class ConfigManager
     private Map<String, String> unformattedShieldNameConverter = new HashMap<>(); //idk
     private Map<String, Shield> shields = new HashMap<>();
     private Map<String, String> sounds = new HashMap<>();
+    private FileConfiguration config;
 
     ConfigManager(JavaPlugin plugin)
     {
-        FileConfiguration config = plugin.getConfig();
+        config = plugin.getConfig();
 
         ConfigurationSection soundsSection = config.getConfigurationSection("Sounds");
         if (soundsSection == null)
@@ -93,8 +94,16 @@ public class ConfigManager
             shields.put(sectionName, new Shield(sectionName, strength, time * 20L, rate));
             unformattedShieldNameConverter.put(ChatColor.stripColor(sectionName), sectionName);
         }
+        
+        config.addDefault("armorSlotToCheck", 0);
+        config.options().copyDefaults(true);
 
         plugin.saveConfig();
+    }
+
+    public int getArmorSlotIndex()
+    {
+        return config.getInt("armorSlotToCheck");
     }
 
     public Set<String> getShieldNames()

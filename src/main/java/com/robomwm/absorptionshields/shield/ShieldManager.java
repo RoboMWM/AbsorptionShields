@@ -195,28 +195,27 @@ public class ShieldManager implements Listener
 
     /**
      * Get the name of the shield worn on the player (i.e. name of chestplate item)
-     * TODO: find a better name...
-     * TODO: allow choosing armor slot to check
      * @param player
      * @return name of the shield; null otherwise (not wearing a shield)
      */
     public String getWornShieldName(Player player)
     {
-        ItemStack chestplate = player.getInventory().getChestplate();
-        if (chestplate == null)
+        ItemStack armorPiece = player.getInventory().getArmorContents()[configManager.getArmorSlotIndex()];
+        if (armorPiece == null)
             return null;
 
-        if (!chestplate.hasItemMeta() || !chestplate.getItemMeta().hasDisplayName())
+        //Use default shield item, if specified
+        if (configManager.isValidShieldName(armorPiece.getType().name().toLowerCase(), true))
+            return armorPiece.getType().name();
+
+        //else get name, if present
+        if (armorPiece.hasItemMeta() && armorPiece.getItemMeta().hasDisplayName())
         {
-            if (!configManager.isValidShieldName(chestplate.getType().name().toLowerCase(), true))
-                return null;
-            return chestplate.getType().name();
+            if (configManager.isValidShieldName(armorPiece.getItemMeta().getDisplayName(), true))
+                return armorPiece.getItemMeta().getDisplayName();
         }
 
-        if (!configManager.isValidShieldName(chestplate.getItemMeta().getDisplayName(), true))
-            return null;
-
-        return chestplate.getItemMeta().getDisplayName();
+        return null;
     }
 
     /**
