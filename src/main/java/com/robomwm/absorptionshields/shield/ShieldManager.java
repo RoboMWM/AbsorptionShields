@@ -10,7 +10,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import com.robomwm.absorptionshields.AbsorptionShields;
 import com.robomwm.absorptionshields.ConfigManager;
 import com.robomwm.absorptionshields.event.ShieldDamageEvent;
@@ -25,7 +24,7 @@ import java.util.Set;
  */
 public class ShieldManager implements Listener
 {
-    private AbsorptionShields instance;
+    private AbsorptionShields plugin;
     private ShieldUtils shieldUtils;
     private ConfigManager configManager;
     private ShieldTrackerTask shieldTrackerTask;
@@ -52,10 +51,10 @@ public class ShieldManager implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.shieldUtils = shieldUtils;
         this.configManager = configManager;
-        this.instance = plugin;
+        this.plugin = plugin;
 
         //Schedule tasks
-        new ShieldRegeneratationTask(instance, this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
+        new ShieldRegeneratationTask(this.plugin, this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
         shieldTrackerTask = new ShieldTrackerTask(plugin, this, configManager);
         shieldTrackerTask.runTaskTimer(plugin, 300L, 20L);
     }
@@ -64,9 +63,9 @@ public class ShieldManager implements Listener
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     private void onQuit(PlayerQuitEvent event)
     {
-        shieldTrackerTask.addRemoveShield(event.getPlayer());
+        shieldTrackerTask.registerOrUnregisterShield(event.getPlayer());
         playersWithDamagedShields.remove(event.getPlayer());
-        event.getPlayer().removeMetadata("AS_SHIELD", instance);
+        event.getPlayer().removeMetadata("AS_SHIELD", plugin);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR) //TODO: change priority back to high once crackshot alternative exists
@@ -87,9 +86,10 @@ public class ShieldManager implements Listener
 
         final double originalDamage = event.getDamage(); //We might need to get this from a lower-priority listener, in case a plugin uses #setDamage.
         final float originalShieldHealth = shieldUtils.getShieldHealth(player);
-        float shieldHealth = originalShieldHealth;
-        if (shieldHealth <= 0f)
+        if (originalShieldHealth <= 0f)
             return;
+
+        float shieldHealth = originalShieldHealth;
 
         //DamageModifier API is deprecated and will likely be removed soon; this'll have to do.
         //getDamage factors in damage before armor/absorption/etc.
@@ -110,7 +110,7 @@ public class ShieldManager implements Listener
             //event.setDamage(originalDamage + originalShieldHealth); //ensures we apply enough damage to surpass the absorption modifier, but still retain other resistances
 
             configManager.playSound(player, "shieldOfflineAlert", false);
-            instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
+            plugin.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalShieldHealth, event));
             return;
         }
 
@@ -139,9 +139,9 @@ public class ShieldManager implements Listener
                     configManager.playSound(player, "lowShieldHitSelf", true);
         }
 
-        instance.timedGlow(player, 8L);
+        plugin.timedGlow(player, 8L);
 
-        instance.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalDamage, event));
+        plugin.getServer().getPluginManager().callEvent(new ShieldDamageEvent(player, originalDamage, event));
     }
 
     /*The resistance modifier is computed according to the original damage value.
@@ -194,28 +194,29 @@ public class ShieldManager implements Listener
     }
 
     /**
-     * Get the name of the shield worn on the player (i.e. name of helmet item)
+     * Get the name of the shield worn on the player (i.e. name of chestplate item)
      * TODO: find a better name...
+     * TODO: allow choosing armor slot to check
      * @param player
      * @return name of the shield; null otherwise (not wearing a shield)
      */
-    public String getWornShield(Player player)
+    public String getWornShieldName(Player player)
     {
-        ItemStack helmet = player.getInventory().getHelmet();
-        if (helmet == null)
+        ItemStack chestplate = player.getInventory().getChestplate();
+        if (chestplate == null)
             return null;
 
-        if (!helmet.hasItemMeta() || !helmet.getItemMeta().hasDisplayName())
+        if (!chestplate.hasItemMeta() || !chestplate.getItemMeta().hasDisplayName())
         {
-            if (!configManager.isValidShieldName(helmet.getType().name().toLowerCase(), true))
+            if (!configManager.isValidShieldName(chestplate.getType().name().toLowerCase(), true))
                 return null;
-            return helmet.getType().name();
+            return chestplate.getType().name();
         }
 
-        if (!configManager.isValidShieldName(helmet.getItemMeta().getDisplayName(), true))
+        if (!configManager.isValidShieldName(chestplate.getItemMeta().getDisplayName(), true))
             return null;
 
-        return helmet.getItemMeta().getDisplayName();
+        return chestplate.getItemMeta().getDisplayName();
     }
 
     /**
@@ -251,9 +252,5 @@ public class ShieldManager implements Listener
         }
         return false;
     }
-
-
-
-
 }
 

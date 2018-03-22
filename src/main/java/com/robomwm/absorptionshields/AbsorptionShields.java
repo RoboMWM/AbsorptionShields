@@ -119,6 +119,15 @@ public class AbsorptionShields extends JavaPlugin
         return itemStack;
     }
 
+    /**
+     * So, I was gonna add this to Usefulutil.
+     * But there's no good way to implement variable priority while maintaining a unique ID w/o
+     * having to create a custom datatype.
+     *
+     * So yea... maybe I'll implement a better version in GrandioseAPI or something...
+     * @param player
+     * @param durationInTicks
+     */
     public void timedGlow(Player player, long durationInTicks)
     {
         final JavaPlugin plugin = this;

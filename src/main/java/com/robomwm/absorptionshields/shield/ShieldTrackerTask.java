@@ -17,9 +17,9 @@ import com.robomwm.absorptionshields.ConfigManager;
  */
 public class ShieldTrackerTask extends BukkitRunnable
 {
-    JavaPlugin instance;
-    ShieldManager shieldManager;
-    ConfigManager configManager;
+    private JavaPlugin instance;
+    private ShieldManager shieldManager;
+    private ConfigManager configManager;
 
     ShieldTrackerTask(JavaPlugin plugin, ShieldManager shieldManager, ConfigManager configManager)
     {
@@ -33,40 +33,40 @@ public class ShieldTrackerTask extends BukkitRunnable
     {
         for (Player player : instance.getServer().getOnlinePlayers())
         {
-            addRemoveShield(player);
+            registerOrUnregisterShield(player);
         }
     }
 
-    public void addRemoveShield(Player player)
+    public void registerOrUnregisterShield(Player player)
     {
         Shield shield = shieldManager.getShield(player);
-        String wearingShieldName = shieldManager.getWornShield(player);
+        String wearingShieldName = shieldManager.getWornShieldName(player);
 
+        //Not wearing a shield, nor is a shield registered
         if (shield == null && wearingShieldName == null)
             return;
 
-        //Add a shield
-        if (shield == null && wearingShieldName != null)
+        //Shield is registered, but not wearing it anymore/wearing a different shield
+        if (shield != null && (wearingShieldName == null || !wearingShieldName.equals(shield.getName())))
+        {
+            player.removeMetadata("AS_SHIELD", instance);
+            shieldManager.shatterShield(player);
+
+            //used to update HealthBar and other plugins that check absorption, etc.
+            EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, 0, EntityRegainHealthEvent.RegainReason.CUSTOM);
+            Bukkit.getPluginManager().callEvent(event);
+            return;
+        }
+
+        //Wearing a shield, but not registered yet
+        if (shield == null)
         {
             player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName, true)));
             shieldManager.addPlayerWithDamagedShield(player);
             return;
         }
 
-        if (shield != null)
-        {
-            //Delete a shield
-            if (wearingShieldName == null || !wearingShieldName.equalsIgnoreCase(shield.getName()))
-            {
-                player.removeMetadata("AS_SHIELD", instance);
-                shieldManager.shatterShield(player);
 
-                //todo: should be a fake damage event. (Right now being used to update HealthBar)
-                EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, 0, EntityRegainHealthEvent.RegainReason.CUSTOM);
-                Bukkit.getPluginManager().callEvent(event);
-                return;
-            }
-        }
     }
 
 
