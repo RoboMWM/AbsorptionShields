@@ -7,6 +7,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class ConfigManager
     private Map<String, String> unformattedShieldNameConverter = new HashMap<>(); //idk
     private Map<String, Shield> shields = new HashMap<>();
     private Map<String, String> sounds = new HashMap<>();
+    private ArmorSlot armorSlot;
     private FileConfiguration config;
 
     ConfigManager(JavaPlugin plugin)
@@ -94,16 +96,38 @@ public class ConfigManager
             shields.put(sectionName, new Shield(sectionName, strength, time * 20L, rate));
             unformattedShieldNameConverter.put(ChatColor.stripColor(sectionName), sectionName);
         }
-        
-        config.addDefault("armorSlotToCheck", 0);
+
+        config.addDefault("armorSlotToCheck", "HELMET");
         config.options().copyDefaults(true);
+
+        try
+        {
+            armorSlot = ArmorSlot.valueOf(config.getString("armorSlotToCheck"));
+        }
+        catch (Throwable rock)
+        {
+            config.set("armorSlotToCheck", "HELMET");
+            armorSlot = ArmorSlot.valueOf(config.getString("armorSlotToCheck"));
+        }
+
 
         plugin.saveConfig();
     }
 
-    public int getArmorSlotIndex()
+    public ItemStack getArmorItem(Player player)
     {
-        return config.getInt("armorSlotToCheck");
+        switch (armorSlot)
+        {
+            case HELMET:
+                return player.getInventory().getHelmet();
+            case CHESTPLATE:
+                return player.getInventory().getChestplate();
+            case LEGGINGS:
+                return player.getInventory().getLeggings();
+            case BOOTS:
+                return player.getInventory().getBoots();
+        }
+        return null;
     }
 
     public Set<String> getShieldNames()
@@ -155,4 +179,12 @@ public class ConfigManager
     public float r4nd0m(float min, float max) {
         return (float) ThreadLocalRandom.current().nextDouble(min, max + 1.0D);
     }
+}
+
+enum ArmorSlot
+{
+    HELMET,
+    CHESTPLATE,
+    LEGGINGS,
+    BOOTS
 }

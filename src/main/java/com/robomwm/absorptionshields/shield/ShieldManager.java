@@ -200,7 +200,7 @@ public class ShieldManager implements Listener
      */
     public String getWornShieldName(Player player)
     {
-        ItemStack armorPiece = player.getInventory().getArmorContents()[configManager.getArmorSlotIndex()];
+        ItemStack armorPiece = configManager.getArmorItem(player);
         if (armorPiece == null)
             return null;
 
