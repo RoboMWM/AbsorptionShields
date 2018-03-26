@@ -83,8 +83,7 @@ public class AbsorptionShields extends JavaPlugin
         ItemMeta itemMeta = shieldItem.getItemMeta();
         itemMeta.setDisplayName(shield.getFormattedName());
         shieldItem.setItemMeta(itemMeta);
-        appendShieldStats(shieldItem);
-        return shieldItem;
+        return appendShieldStats(shieldItem);
     }
 
     public List<String> getStats(Shield shield)
@@ -106,7 +105,7 @@ public class AbsorptionShields extends JavaPlugin
         ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
         String shieldName = customItemRecipes.extractCustomID(itemMeta);
 
-        Shield shield = configManager.createShield(shieldName, true);
+        Shield shield = configManager.createShield(shieldName, false);
         if (shield == null)
             return null;
 
