@@ -10,16 +10,16 @@ softdepend:
 depend:
 - CustomItemRecipes
 commands:
-  giveshield:
+  addshieldstats:
       description: Gives you the specified shield
-      permission: absorptionshields.giveshield
+      permission: absorptionshields.addshieldstats
       permission-message: Hmm, this command isn't for you.
 permissions:
     absorptionshields.*:
         description: Grants ALL THE THINGS
         children:
-            absorptionshields.createshield: true
-    absorptionshields.createshield:
-        description: Permission to /giveshield
+            absorptionshields.addshieldstats: true
+    absorptionshields.addshieldstats:
+        description: Permission to /addshieldstats
         default: op
         

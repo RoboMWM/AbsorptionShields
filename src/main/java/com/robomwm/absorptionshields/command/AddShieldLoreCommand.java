@@ -16,12 +16,12 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author RoboMWM
  */
-public class GiveShieldCommand implements CommandExecutor
+public class AddShieldLoreCommand implements CommandExecutor
 {
     private AbsorptionShields instance;
     private ConfigManager configManager;
 
-    public GiveShieldCommand(AbsorptionShields plugin, ConfigManager configManager)
+    public AddShieldLoreCommand(AbsorptionShields plugin, ConfigManager configManager)
     {
         instance = plugin;
         this.configManager = configManager;
@@ -36,6 +36,13 @@ public class GiveShieldCommand implements CommandExecutor
         }
 
         Player player = (Player)sender;
+
+        if (player.getInventory().getItemInMainHand() == null
+                || player.getInventory().getItemInMainHand().getType() == Material.AIR)
+        {
+            player.sendMessage("You need an item in your hand to convert into a shield.");
+            return false;
+        }
 
         if (args.length < 1)
         {
@@ -52,7 +59,9 @@ public class GiveShieldCommand implements CommandExecutor
             return false;
         }
 
-        player.getInventory().addItem(instance.getShieldItem(String.join(" ", args)));
+        ItemStack itemStack = instance.getShieldItem(String.join(" ", args), player.getInventory().getItemInMainHand());
+        player.getInventory().setItemInMainHand(itemStack);
+        player.sendMessage("Appended stats in the lore of this item. Please note that you must register this item with CustomItemRecipes (via /citem <shield_name>) before this item is recognized as an AbsorptionShield.");
 
         return true;
     }

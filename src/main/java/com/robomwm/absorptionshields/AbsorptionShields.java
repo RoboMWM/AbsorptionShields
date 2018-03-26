@@ -11,7 +11,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import com.robomwm.absorptionshields.command.GiveShieldCommand;
+import com.robomwm.absorptionshields.command.AddShieldLoreCommand;
 import com.robomwm.absorptionshields.shield.ShieldUtils;
 
 import java.text.DecimalFormat;
@@ -52,7 +52,7 @@ public class AbsorptionShields extends JavaPlugin
 
         configManager = new ConfigManager(this);
         new ShieldManager(this, shieldUtils, configManager);
-        getCommand("giveshield").setExecutor(new GiveShieldCommand(this, configManager));
+        getCommand("addshieldstats").setExecutor(new AddShieldLoreCommand(this, configManager));
     }
 
     public CustomItemRecipes getCustomItemRecipes()
@@ -71,19 +71,16 @@ public class AbsorptionShields extends JavaPlugin
         return configManager;
     }
 
-    public ItemStack getShieldItem(String shieldName)
+    public ItemStack getShieldItem(String shieldName, ItemStack itemStack)
     {
         if (!configManager.isValidShieldName(shieldName, false))
             return null;
 
-        ItemStack shieldItem = customItemRecipes.getItem(shieldName);
-        if (shieldItem == null)
-            return null;
         Shield shield = configManager.createShield(shieldName, false);
-        ItemMeta itemMeta = shieldItem.getItemMeta();
+        ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(shield.getFormattedName());
-        shieldItem.setItemMeta(itemMeta);
-        return appendShieldStats(shieldItem);
+        itemStack.setItemMeta(itemMeta);
+        return appendShieldStats(shieldName, itemStack);
     }
 
     public List<String> getStats(Shield shield)
@@ -100,7 +97,7 @@ public class AbsorptionShields extends JavaPlugin
         return lore;
     }
 
-    public ItemStack appendShieldStats(ItemStack itemStack)
+    public ItemStack appendShieldStats(String name, ItemStack itemStack)
     {
         ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
         String shieldName = customItemRecipes.extractCustomID(itemMeta);
