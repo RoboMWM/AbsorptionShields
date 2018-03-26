@@ -93,7 +93,7 @@ public class ConfigManager
             }
 
             sectionName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', sectionName);
-            shields.put(sectionName, new Shield(sectionName, strength, time * 20L, rate));
+            shields.put(sectionName, new Shield(ChatColor.stripColor(sectionName), sectionName, strength, time * 20L, rate));
             unformattedShieldNameConverter.put(ChatColor.stripColor(sectionName), sectionName);
         }
 

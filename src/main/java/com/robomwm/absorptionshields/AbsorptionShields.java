@@ -81,7 +81,7 @@ public class AbsorptionShields extends JavaPlugin
             return null;
         Shield shield = configManager.createShield(shieldName, false);
         ItemMeta itemMeta = shieldItem.getItemMeta();
-        itemMeta.setDisplayName(shield.getName());
+        itemMeta.setDisplayName(shield.getFormattedName());
         shieldItem.setItemMeta(itemMeta);
         appendShieldStats(shieldItem);
         return shieldItem;

@@ -3,6 +3,7 @@ package com.robomwm.absorptionshields.shield;
 public class Shield
 {
     private String name;
+    private String formattedName;
     private float maxShieldStrength;
     private long regenTime;
     private float regenRate;
@@ -14,9 +15,10 @@ public class Shield
      * @param time Time before regenerating in ticks
      * @param rate How many healthpoints to regenerate per second
      */
-    public Shield(String name, float strength, long time, float rate)
+    public Shield(String name, String formattedName, float strength, long time, float rate)
     {
         this.name = name;
+        this.formattedName = formattedName;
         this.maxShieldStrength = strength;
         this.regenTime = time;
         this.regenRate = rate;
@@ -31,6 +33,7 @@ public class Shield
     public Shield(Shield template)
     {
         this.name = template.name;
+        this.formattedName = template.formattedName;
         this.maxShieldStrength = template.maxShieldStrength;
         this.regenTime = template.regenTime;
         this.regenRate = template.regenRate;
@@ -73,5 +76,10 @@ public class Shield
     public String getName()
     {
         return name;
+    }
+
+    public String getFormattedName()
+    {
+        return formattedName;
     }
 }
