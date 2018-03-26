@@ -204,18 +204,7 @@ public class ShieldManager implements Listener
         if (armorPiece == null)
             return null;
 
-        //Use default shield item, if specified
-        if (configManager.isValidShieldName(armorPiece.getType().name().toLowerCase(), true))
-            return armorPiece.getType().name();
-
-        //else get name, if present
-        if (armorPiece.hasItemMeta() && armorPiece.getItemMeta().hasDisplayName())
-        {
-            if (configManager.isValidShieldName(armorPiece.getItemMeta().getDisplayName(), true))
-                return armorPiece.getItemMeta().getDisplayName();
-        }
-
-        return null;
+        return plugin.getCustomItemRecipes().extractCustomID(armorPiece.getItemMeta());
     }
 
     /**

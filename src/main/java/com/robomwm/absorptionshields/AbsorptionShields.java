@@ -2,7 +2,7 @@ package com.robomwm.absorptionshields;
 
 import com.robomwm.absorptionshields.shield.Shield;
 import com.robomwm.absorptionshields.shield.ShieldManager;
-import org.apache.commons.lang.WordUtils;
+import com.robomwm.customitemrecipes.CustomItemRecipes;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,13 +11,11 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import com.robomwm.absorptionshields.command.AddLoreCommand;
-import com.robomwm.absorptionshields.command.ConvertShieldCommand;
+import com.robomwm.absorptionshields.command.GiveShieldCommand;
 import com.robomwm.absorptionshields.shield.ShieldUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,8 +25,9 @@ import java.util.List;
  */
 public class AbsorptionShields extends JavaPlugin
 {
-    ConfigManager configManager;
-    ShieldUtils shieldUtils;
+    private CustomItemRecipes customItemRecipes;
+    private ConfigManager configManager;
+    private ShieldUtils shieldUtils;
 
     public ShieldUtils getShieldUtils()
     {
@@ -37,6 +36,7 @@ public class AbsorptionShields extends JavaPlugin
 
     public void onEnable()
     {
+        customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
 
         try
         {
@@ -52,8 +52,12 @@ public class AbsorptionShields extends JavaPlugin
 
         configManager = new ConfigManager(this);
         new ShieldManager(this, shieldUtils, configManager);
-        getCommand("createshield").setExecutor(new ConvertShieldCommand(this, configManager));
-        getCommand("addlore").setExecutor(new AddLoreCommand(this));
+        getCommand("giveshield").setExecutor(new GiveShieldCommand(this, configManager));
+    }
+
+    public CustomItemRecipes getCustomItemRecipes()
+    {
+        return customItemRecipes;
     }
 
     public void onDisable()
@@ -67,17 +71,20 @@ public class AbsorptionShields extends JavaPlugin
         return configManager;
     }
 
-    public ItemStack convertToShield(String shieldName, ItemStack itemStack)
+    public ItemStack getShieldItem(String shieldName)
     {
         if (!configManager.isValidShieldName(shieldName, false))
             return null;
 
+        ItemStack shieldItem = customItemRecipes.getItem(shieldName);
+        if (shieldItem == null)
+            return null;
         Shield shield = configManager.createShield(shieldName, false);
-        ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
+        appendShieldStats(shieldItem);
+        ItemMeta itemMeta = shieldItem.getItemMeta();
         itemMeta.setDisplayName(shield.getName());
-        itemMeta.setLore(getStats(shield));
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
+        shieldItem.setItemMeta(itemMeta);
+        return shieldItem;
     }
 
     public List<String> getStats(Shield shield)
@@ -86,33 +93,45 @@ public class AbsorptionShields extends JavaPlugin
         DecimalFormat df = new DecimalFormat("#.##");
 
         //TODO: configurable...
-        lore.add("");
         lore.add(ChatColor.YELLOW + "AbsorptionShield Stats:");
-        lore.add(ChatColor.GOLD + "- Capacity: " + ChatColor.YELLOW + shield.getMaxShieldStrength() / 2);
-        lore.add(ChatColor.GOLD + "- Recharge Rate: " + ChatColor.YELLOW + shield.getRegenRate());
-        lore.add(ChatColor.GOLD + "- Recharge Delay: " + ChatColor.YELLOW + df.format(shield.getRegenTime() / 20L));
+        lore.add(ChatColor.GOLD + "- Capacity: " + ChatColor.YELLOW + shield.getMaxShieldStrength() / 2 + "hp");
+        lore.add(ChatColor.GOLD + "- Recharge Rate: " + ChatColor.YELLOW + shield.getRegenRate() + "hp/s");
+        lore.add(ChatColor.GOLD + "- Recharge Delay: " + ChatColor.YELLOW + df.format(shield.getRegenTime() / 20L) + "s");
 
         return lore;
     }
 
-    public ItemStack addLore(String loreToAdd, ItemStack itemStack)
+    public ItemStack appendShieldStats(ItemStack itemStack)
     {
         ItemMeta itemMeta = itemStack.getItemMeta(); //I guess all items have metadata, since there's no way to construct new ones...
-        String shieldName = itemMeta.getDisplayName();
-
-        if (!configManager.isValidShieldName(shieldName, true))
-            return null;
+        String shieldName = customItemRecipes.extractCustomID(itemMeta);
 
         Shield shield = configManager.createShield(shieldName, true);
+        if (shield == null)
+            return null;
 
-        List<String> lore = new ArrayList<>();
+        int i = 0;
+        List<String> lore;
 
-        loreToAdd = WordUtils.wrap(ChatColor.translateAlternateColorCodes('&', loreToAdd), 50, "\n", false);
-        String[] loreToAddArray = loreToAdd.split("\n");
-        lore.addAll(Arrays.asList(loreToAddArray));
+        if (itemMeta.hasLore())
+        {
+            lore = itemMeta.getLore();
+            for (i = 0; i < lore.size(); i++)
+                if (lore.get(i).equalsIgnoreCase(ChatColor.YELLOW + "AbsorptionShield Stats:")) //Replace existing stats, if present
+                {
+                    //Aren't stringlists lovely
+                    lore.remove(i);
+                    lore.remove(i);
+                    lore.remove(i);
+                    lore.remove(i);
+                    break;
+                }
+        }
+        else
+            lore = new ArrayList<>();
 
-        //Append stats at end
-        lore.addAll(getStats(shield));
+        //Append stats
+        lore.addAll(i, getStats(shield));
 
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);

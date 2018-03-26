@@ -7,14 +7,12 @@ softdepend:
 - CrackShot
 - ExtraHardMode
 - MLGDamageIndicators
+depend:
+- CustomItemRecipes
 commands:
-  createshield:
-      description: Converts the item you are holding into a shield
-      permission: absorptionshields.createshield
-      permission-message: Hmm, this command isn't for you.
-  addlore:
-      description: Adds lore to a shield item
-      permission: absorptionshields.createshield
+  giveshield:
+      description: Gives you the specified shield
+      permission: absorptionshields.giveshield
       permission-message: Hmm, this command isn't for you.
 permissions:
     absorptionshields.*:
@@ -22,6 +20,6 @@ permissions:
         children:
             absorptionshields.createshield: true
     absorptionshields.createshield:
-        description: Permission to /createshield
+        description: Permission to /giveshield
         default: op
         

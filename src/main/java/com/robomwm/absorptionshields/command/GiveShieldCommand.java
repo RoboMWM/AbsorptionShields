@@ -16,12 +16,12 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author RoboMWM
  */
-public class ConvertShieldCommand implements CommandExecutor
+public class GiveShieldCommand implements CommandExecutor
 {
-    AbsorptionShields instance;
-    ConfigManager configManager;
+    private AbsorptionShields instance;
+    private ConfigManager configManager;
 
-    public ConvertShieldCommand(AbsorptionShields plugin, ConfigManager configManager)
+    public GiveShieldCommand(AbsorptionShields plugin, ConfigManager configManager)
     {
         instance = plugin;
         this.configManager = configManager;
@@ -36,13 +36,6 @@ public class ConvertShieldCommand implements CommandExecutor
         }
 
         Player player = (Player)sender;
-
-        if (player.getInventory().getItemInMainHand() == null
-                || player.getInventory().getItemInMainHand().getType() == Material.AIR)
-        {
-            player.sendMessage("You need an item in your hand to convert into a shield.");
-            return false;
-        }
 
         if (args.length < 1)
         {
@@ -59,9 +52,7 @@ public class ConvertShieldCommand implements CommandExecutor
             return false;
         }
 
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-
-        player.getInventory().setItemInMainHand(instance.convertToShield(String.join(" ", args), itemStack));
+        player.getInventory().addItem(instance.getShieldItem(String.join(" ", args)));
 
         return true;
     }
