@@ -141,7 +141,7 @@ public class ConfigManager
             return false;
         if (formatted)
             return shields.containsKey(name);
-        return unformattedShieldNameConverter.containsKey(name) && shields.containsKey(unformattedShieldNameConverter.get(name));
+        return unformattedShieldNameConverter.containsKey(name);
     }
 
 

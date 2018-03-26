@@ -71,18 +71,6 @@ public class AbsorptionShields extends JavaPlugin
         return configManager;
     }
 
-    public ItemStack getShieldItem(String shieldName, ItemStack itemStack)
-    {
-        if (!configManager.isValidShieldName(shieldName, false))
-            return null;
-
-        Shield shield = configManager.createShield(shieldName, false);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(shield.getFormattedName());
-        itemStack.setItemMeta(itemMeta);
-        return appendShieldStats(shieldName, itemStack);
-    }
-
     public List<String> getStats(Shield shield)
     {
         List<String> lore = new ArrayList<>();
@@ -128,6 +116,9 @@ public class AbsorptionShields extends JavaPlugin
 
         //Append stats
         lore.addAll(i, getStats(shield));
+
+        //Set Display name
+        itemMeta.setDisplayName(shield.getFormattedName());
 
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);

@@ -46,23 +46,33 @@ public class AddShieldLoreCommand implements CommandExecutor
 
         if (args.length < 1)
         {
-            player.sendMessage("/" + label + " <shieldName>");
-            player.sendMessage("Available shields: ");
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String shieldName : configManager.getShieldNames())
-            {
-                stringBuilder.append(shieldName);
-                stringBuilder.append(", ");
-            }
-            stringBuilder.setLength(stringBuilder.length() - 2);
-            player.sendMessage(stringBuilder.toString());
+            printShields(player);
             return false;
         }
 
-        ItemStack itemStack = instance.getShieldItem(String.join(" ", args), player.getInventory().getItemInMainHand());
+        ItemStack itemStack = instance.appendShieldStats(String.join(" ", args), player.getInventory().getItemInMainHand());
+        if (itemStack == null)
+        {
+            player.sendMessage("Invalid shield specified.");
+            printShields(player);
+            return true;
+        }
         player.getInventory().setItemInMainHand(itemStack);
         player.sendMessage("Appended stats in the lore of this item. Please note that you must register this item with CustomItemRecipes (via /citem <shield_name>) before this item is recognized as an AbsorptionShield.");
 
         return true;
+    }
+
+    private void printShields(Player player)
+    {
+        player.sendMessage("Available shields: ");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String shieldName : configManager.getShieldNames())
+        {
+            stringBuilder.append(shieldName);
+            stringBuilder.append(", ");
+        }
+        stringBuilder.setLength(stringBuilder.length() - 2);
+        player.sendMessage(stringBuilder.toString());
     }
 }
