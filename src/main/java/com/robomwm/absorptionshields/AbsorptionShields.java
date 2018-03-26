@@ -80,10 +80,10 @@ public class AbsorptionShields extends JavaPlugin
         if (shieldItem == null)
             return null;
         Shield shield = configManager.createShield(shieldName, false);
-        appendShieldStats(shieldItem);
         ItemMeta itemMeta = shieldItem.getItemMeta();
         itemMeta.setDisplayName(shield.getName());
         shieldItem.setItemMeta(itemMeta);
+        appendShieldStats(shieldItem);
         return shieldItem;
     }
 

@@ -45,7 +45,7 @@ public class ShieldRegeneratationTask extends BukkitRunnable
             Shield shield = shieldManager.getShield(player);
 
             //Not ready to regenerate yet
-            if (!shield.incrementCounter(5L))
+            if (!shield.incrementCounter(rateToCheck))
                 continue;
 
             float shieldHealth = shieldUtils.getShieldHealth(player);

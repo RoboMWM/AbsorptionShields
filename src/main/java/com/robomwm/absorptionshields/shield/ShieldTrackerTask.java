@@ -43,7 +43,7 @@ public class ShieldTrackerTask extends BukkitRunnable
         String wearingShieldName = shieldManager.getWornShieldName(player);
 
         //Not wearing a shield, nor is a shield registered
-        if (shield == null && wearingShieldName == null)
+        if (shield == null && (wearingShieldName == null || !configManager.isValidShieldName(wearingShieldName, false)))
             return;
 
         //Shield is registered, but not wearing it anymore/wearing a different shield
@@ -54,14 +54,14 @@ public class ShieldTrackerTask extends BukkitRunnable
 
             //used to update HealthBar and other plugins that check absorption, etc.
             EntityRegainHealthEvent event = new EntityRegainHealthEvent(player, 0, EntityRegainHealthEvent.RegainReason.CUSTOM);
-            Bukkit.getPluginManager().callEvent(event);
+            instance.getServer().getPluginManager().callEvent(event);
             return;
         }
 
         //Wearing a shield, but not registered yet
         if (shield == null)
         {
-            player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName, true)));
+            player.setMetadata("AS_SHIELD", new FixedMetadataValue(instance, configManager.createShield(wearingShieldName, false)));
             shieldManager.addPlayerWithDamagedShield(player);
             return;
         }
