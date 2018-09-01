@@ -54,7 +54,7 @@ public class ShieldManager implements Listener
         this.plugin = plugin;
 
         //Schedule tasks
-        new ShieldRegeneratationTask(this.plugin, this, shieldUtils, 5L).runTaskTimer(plugin, 300L, 5L);
+        new ShieldRegeneratationTask(this.plugin, this, shieldUtils, 5L).runTaskTimer(plugin, 5L, 5L);
         shieldTrackerTask = new ShieldTrackerTask(plugin, this, configManager);
         shieldTrackerTask.runTaskTimer(plugin, 300L, 20L);
     }
@@ -204,7 +204,10 @@ public class ShieldManager implements Listener
         if (armorPiece == null)
             return null;
 
-        return plugin.getCustomItemRecipes().extractCustomID(armorPiece.getItemMeta());
+        String name = plugin.getCustomItemRecipes().extractCustomID(armorPiece.getItemMeta());
+        if (name == null)
+            return armorPiece.getType().name();
+        return name;
     }
 
     /**
@@ -218,21 +221,21 @@ public class ShieldManager implements Listener
         {
             case CHAINMAIL_HELMET:
             case LEATHER_HELMET:
-            case GOLD_HELMET:
+            case GOLDEN_HELMET:
             case IRON_HELMET:
             case DIAMOND_HELMET:
-            case GOLD_CHESTPLATE:
+            case GOLDEN_CHESTPLATE:
             case IRON_CHESTPLATE:
             case DIAMOND_CHESTPLATE:
             case LEATHER_CHESTPLATE:
             case CHAINMAIL_CHESTPLATE:
-            case GOLD_LEGGINGS:
+            case GOLDEN_LEGGINGS:
             case IRON_LEGGINGS:
             case DIAMOND_LEGGINGS:
             case LEATHER_LEGGINGS:
             case CHAINMAIL_LEGGINGS:
             case DIAMOND_BOOTS:
-            case GOLD_BOOTS:
+            case GOLDEN_BOOTS:
             case CHAINMAIL_BOOTS:
             case IRON_BOOTS:
             case LEATHER_BOOTS:
