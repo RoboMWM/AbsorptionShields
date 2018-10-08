@@ -79,7 +79,6 @@ public class ShieldManager implements Listener
         if (!hasShield(player))
             return;
 
-        getShield(player).resetRegenCounter();
         playersWithDamagedShields.add(player);
         Shield shield = getShield(player);
         shield.resetRegenCounter();
@@ -204,7 +203,9 @@ public class ShieldManager implements Listener
         if (armorPiece == null)
             return null;
 
-        String name = plugin.getCustomItemRecipes().extractCustomID(armorPiece.getItemMeta());
+        String name = null;
+        if (plugin.getCustomItemRecipes() != null)
+            name = plugin.getCustomItemRecipes().extractCustomID(armorPiece.getItemMeta());
         if (name == null)
             return armorPiece.getType().name();
         return name;

@@ -3,6 +3,7 @@ package com.robomwm.absorptionshields;
 import com.robomwm.absorptionshields.shield.Shield;
 import com.robomwm.absorptionshields.shield.ShieldManager;
 import com.robomwm.customitemrecipes.CustomItemRecipes;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +18,7 @@ import com.robomwm.absorptionshields.shield.ShieldUtils;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Created on 3/18/2017.
@@ -36,7 +38,18 @@ public class AbsorptionShields extends JavaPlugin
 
     public void onEnable()
     {
-        customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
+        try
+        {
+            customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
+        }
+        catch (Throwable rock)
+        {
+            getLogger().warning("CustomItemRecipes is not installed.");
+            getLogger().warning("Only shields in config using Material enum names will function; the rest will not be detected.");
+            getLogger().warning("Get CustomItemRecipes to define your own custom items to use as shields!");
+            getLogger().warning("http://r.robomwm.com/cir");
+        }
+
 
         try
         {
@@ -53,6 +66,34 @@ public class AbsorptionShields extends JavaPlugin
         configManager = new ConfigManager(this);
         new ShieldManager(this, shieldUtils, configManager);
         getCommand("addshieldstats").setExecutor(new AddShieldLoreCommand(this, configManager));
+
+        try
+        {
+            Metrics metrics = new Metrics(this);
+            metrics.addCustomChart(new Metrics.SimplePie("bukkit_implementation", new Callable<String>()
+            {
+                @Override
+                public String call() throws Exception
+                {
+                    return getServer().getVersion().split("-")[1];
+                }
+            }));
+
+            for (final String key : getConfig().getKeys(false))
+            {
+                if (!getConfig().isBoolean(key) && !getConfig().isInt(key) && !getConfig().isString(key))
+                    continue;
+                metrics.addCustomChart(new Metrics.SimplePie(key.toLowerCase(), new Callable<String>()
+                {
+                    @Override
+                    public String call() throws Exception
+                    {
+                        return getConfig().getString(key);
+                    }
+                }));
+            }
+        }
+        catch (Throwable ignored) {}
     }
 
     public CustomItemRecipes getCustomItemRecipes()

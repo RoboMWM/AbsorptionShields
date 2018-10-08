@@ -56,14 +56,18 @@ public class ConfigManager
         if (shieldsSection == null)
         {
             shieldsSection = config.createSection("Shields");
-            ConfigurationSection bumbleBee = shieldsSection.createSection("&6bumblebee");
+            ConfigurationSection bumbleBee = shieldsSection.createSection("bumblebee");
             bumbleBee.set("strength", 6);
             bumbleBee.set("time", 2);
             bumbleBee.set("rate", 3);
-            ConfigurationSection sponge = shieldsSection.createSection("&esponge");
+            ConfigurationSection sponge = shieldsSection.createSection("sponge");
             sponge.set("strength", 24);
             sponge.set("time", 5);
             sponge.set("rate", 1);
+            ConfigurationSection goldHelmet = shieldsSection.createSection("GOLDEN_HELMET");
+            goldHelmet.set("strength", 18);
+            goldHelmet.set("time", 3);
+            goldHelmet.set("rate", 2);
         }
         for (String sectionName : shieldsSection.getKeys(false))
         {

@@ -3,11 +3,11 @@ version: ${project.version}
 website: http://robomwm.com
 author: RoboMWM
 main: com.robomwm.absorptionshields.AbsorptionShields
+api-version: 1.13
 softdepend:
 - CrackShot
 - ExtraHardMode
 - MLGDamageIndicators
-depend:
 - CustomItemRecipes
 commands:
   addshieldstats:

@@ -40,7 +40,7 @@ public class AddShieldLoreCommand implements CommandExecutor
         if (player.getInventory().getItemInMainHand() == null
                 || player.getInventory().getItemInMainHand().getType() == Material.AIR)
         {
-            player.sendMessage("You need an item in your hand to convert into a shield.");
+            player.sendMessage("You need to hold a shield item in your hand to append stats to it.");
             return false;
         }
 
@@ -58,7 +58,9 @@ public class AddShieldLoreCommand implements CommandExecutor
             return true;
         }
         player.getInventory().setItemInMainHand(itemStack);
-        player.sendMessage("Appended stats in the lore of this item. Please note that you must register this item with CustomItemRecipes (via /citem <shield_name>) before this item is recognized as an AbsorptionShield.");
+        player.sendMessage("Appended the specified shield stats to the lore of this item.");
+        if (Material.getMaterial(String.join(" ", args)) == null)
+            player.sendMessage("Please note that you must register this item with CustomItemRecipes (via /citem <shield_name>) before this item is recognized as an AbsorptionShield.");
 
         return true;
     }

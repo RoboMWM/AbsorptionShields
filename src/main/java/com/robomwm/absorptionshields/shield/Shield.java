@@ -8,7 +8,7 @@ public class Shield
     private long regenTime;
     private float regenRate;
 
-    private long regenCounter;
+    private long regenCounter; //when equal to regenTime, shield regen delay has elapsed
 
     /**
      * @param strength maximum healthpoints of shield
