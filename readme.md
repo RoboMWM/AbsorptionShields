@@ -4,11 +4,11 @@ Support this project on [Patreon!](https://patreon.com/RoboMWM)
 Have you ever dreamed of a day where the "personal shield" mechanic from games like Borderlands, Halo, Overwatch, etc. were in Minecraft? No? Well I did. Thanks to the absorption health being an actual, editable field instead of just being chained to a potion, this is possible to do somewhat rather elegantly in Minecraft.
 
 #### Dependencies
-- <a href="https://dev.bukkit.org/projects/customitemrecipes" target="_blank">CustomItemRecipes</a>
+- <a href="https://dev.bukkit.org/projects/customitemregistry" target="_blank">CustomItemRegistry</a>
 
 If you want, you can define just material types (using the Material enum name) to be used as a shield, so this dependency is technically optional. 
 
-However, if you want multiple items of the same type to represent different kinds of shield (e.g. differentiated via lore, display name, etc.) you will need to use CustomItemRecipes to register these custom items for use in AbsorptionShields. You can also use that plugin to create the custom items too!
+However, if you want multiple items of the same type to represent different kinds of shield (e.g. differentiated via lore, display name, etc.) you will need to use CustomItemRegistry to register these custom items for use in AbsorptionShields. You can also use that plugin to create the custom items too!
 
 ## A video is worth 60,000 words a second
 Note: shields can now be any part of armor you choose (but must be consistent, e.g. if you choose the chestplate to be checked for shields, all shields must be chestplate items). Also, /createshield has been removed.
@@ -31,7 +31,7 @@ You can also test it out on MLG Fortress. IP: `MLG.ROBOMWM.COM`
 
 
 ### Commands
-- `/addshieldstats <shield name>` - Appends lore with the specified shield stats to the held shield item. Particularly useful when creating a custom item to register in CustomItemRecipes. Requires the `absorptionshields.addshieldstats` permission, given to ops by default.
+- `/addshieldstats <shield name>` - Appends lore with the specified shield stats to the held shield item. Particularly useful when creating a custom item to register in CustomItemRegistry. Requires the `absorptionshields.addshieldstats` permission, given to ops by default.
 
 ### Config.yml
 ```yml
