@@ -2,7 +2,7 @@ package com.robomwm.absorptionshields;
 
 import com.robomwm.absorptionshields.shield.Shield;
 import com.robomwm.absorptionshields.shield.ShieldManager;
-import com.robomwm.customitemrecipes.CustomItemRecipes;
+import com.robomwm.customitemregistry.CustomItemRegistry;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ import java.util.concurrent.Callable;
  */
 public class AbsorptionShields extends JavaPlugin
 {
-    private CustomItemRecipes customItemRecipes;
+    private CustomItemRegistry customItemRegistry;
     private ConfigManager configManager;
     private ShieldUtils shieldUtils;
 
@@ -40,7 +40,7 @@ public class AbsorptionShields extends JavaPlugin
     {
         try
         {
-            customItemRecipes = (CustomItemRecipes)getServer().getPluginManager().getPlugin("CustomItemRecipes");
+            customItemRegistry = (CustomItemRegistry)getServer().getPluginManager().getPlugin("CustomItemRecipes");
         }
         catch (Throwable rock)
         {
@@ -69,7 +69,7 @@ public class AbsorptionShields extends JavaPlugin
 
         try
         {
-            Metrics metrics = new Metrics(this);
+            Metrics metrics = new Metrics(this, 7843);
             metrics.addCustomChart(new Metrics.SimplePie("bukkit_implementation", new Callable<String>()
             {
                 @Override
@@ -96,9 +96,9 @@ public class AbsorptionShields extends JavaPlugin
         catch (Throwable ignored) {}
     }
 
-    public CustomItemRecipes getCustomItemRecipes()
+    public CustomItemRegistry getCustomItemRegistry()
     {
-        return customItemRecipes;
+        return customItemRegistry;
     }
 
     public void onDisable()
