@@ -44,10 +44,10 @@ public class AbsorptionShields extends JavaPlugin
         }
         catch (Throwable rock)
         {
-            getLogger().warning("CustomItemRecipes is not installed.");
+            getLogger().warning("CustomItemRegistry is not installed.");
             getLogger().warning("Only shields in config using Material enum names will function; the rest will not be detected.");
-            getLogger().warning("Get CustomItemRecipes to define your own custom items to use as shields!");
-            getLogger().warning("http://r.robomwm.com/cir");
+            getLogger().warning("Get CustomItemRegistry to define your own custom items to use as shields!");
+            getLogger().warning("https://r.robomwm.com/cir");
         }
 
 
