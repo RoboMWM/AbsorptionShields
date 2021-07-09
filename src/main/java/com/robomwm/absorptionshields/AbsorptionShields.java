@@ -53,7 +53,7 @@ public class AbsorptionShields extends JavaPlugin
 
         try
         {
-            shieldUtils = new ShieldUtils(this);
+            shieldUtils = new ShieldUtils();
         }
         catch (Exception e)
         {
