@@ -84,11 +84,11 @@ public class ShieldManager implements Listener
         shield.resetRegenCounter();
 
         final double originalDamage = event.getDamage(); //We might need to get this from a lower-priority listener, in case a plugin uses #setDamage.
-        final float originalShieldHealth = shieldUtils.getShieldHealth(player);
+        final double originalShieldHealth = shieldUtils.getShieldHealth(player);
         if (originalShieldHealth <= 0f)
             return;
 
-        float shieldHealth = originalShieldHealth;
+        double shieldHealth = originalShieldHealth;
 
         //DamageModifier API is deprecated and will likely be removed soon; this'll have to do.
         //getDamage factors in damage before armor/absorption/etc.
