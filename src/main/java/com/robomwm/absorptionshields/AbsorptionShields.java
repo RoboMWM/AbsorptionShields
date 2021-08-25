@@ -4,6 +4,7 @@ import com.robomwm.absorptionshields.shield.Shield;
 import com.robomwm.absorptionshields.shield.ShieldManager;
 import com.robomwm.customitemregistry.CustomItemRegistry;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -70,7 +71,7 @@ public class AbsorptionShields extends JavaPlugin
         try
         {
             Metrics metrics = new Metrics(this, 7843);
-            metrics.addCustomChart(new Metrics.SimplePie("bukkit_implementation", new Callable<String>()
+            metrics.addCustomChart(new SimplePie("bukkit_implementation", new Callable<String>()
             {
                 @Override
                 public String call() throws Exception
@@ -83,7 +84,7 @@ public class AbsorptionShields extends JavaPlugin
             {
                 if (!getConfig().isBoolean(key) && !getConfig().isInt(key) && !getConfig().isString(key))
                     continue;
-                metrics.addCustomChart(new Metrics.SimplePie(key.toLowerCase(), new Callable<String>()
+                metrics.addCustomChart(new SimplePie(key.toLowerCase(), new Callable<String>()
                 {
                     @Override
                     public String call() throws Exception
